@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import user from './routes/user';
+import booking from './routes/booking';
 
 dotenv.config();
 // const { env } = process;
@@ -16,5 +17,6 @@ const PORT = process.env.PORT || process.env.APP_PORT;
 
 // use route
 app.use('/api/user', user);
+app.use('/api/booking', booking);
 
 app.listen(PORT, () => console.log(`App started on port ${PORT}`));
