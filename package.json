@@ -1,0 +1,51 @@
+{
+  "name": "snippet",
+  "version": "1.0.0",
+  "description": "WayFarer is a public transportation booking server",
+  "main": "server.js",
+  "scripts": {
+    "migrate": "node-pg-migrate",
+    "db:migrate": "babel-node ./database/schema.js",
+    "db:seed": "babel-node ./database/seeder.js",
+    "app:setup": "npm run db:migrate && npm run db:seed",
+    "build": "babel src --out-dir dist",
+    "start": "node dist/server.js",
+    "server": "nodemon --exec babel-node server.js",
+    "lint": "eslint --fix server/"
+  },
+  "author": "Iyiola Osuagwu",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-plugin-istanbul": "^5.1.4",
+    "babel-watch": "^7.0.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "coveralls": "^3.0.4",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "config": "^3.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.1.1",
+    "faker": "^4.1.0",
+    "gravatar": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-pg-migrate": "^3.21.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "pg": "^7.11.0",
+    "validator": "^11.0.0"
+  }
+}
