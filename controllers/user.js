@@ -47,12 +47,12 @@ userController.signupUser = async (req, res) => {
       const newUser = await userQueries.createUser(first_name, last_name, email, passwordHash);
 
       const payload = {
-         newUser: {
+         User: {
             user_id: newUser.id
-      }
+         }
       };
 
-      const { user_id } = payload.newUser;
+      const { user_id } = payload.User;
       jwt.sign(
       payload,
       env.JWT_SECRET,
@@ -62,10 +62,11 @@ userController.signupUser = async (req, res) => {
          res.json({ token, user_id });
       }
       );
-      console.log('meee');
+      console.log('reg');
    } catch (error) {
       return res.status(500).json({
-         status: 'error'
+         status: 'error',
+         msg: `${error.message}`
       });
    }
 };
@@ -82,15 +83,15 @@ userController.signinUser = async (req, res) => {
 
       const { email, password } = req.body;
       try {
-         const existingUser = await userQueries.findUserByEmail(email);
+         const loggedinUser = await userQueries.findUserByEmail(email);
 
-         if (!existingUser) {
+         if (!loggedinUser) {
             return res.status(400).json({
                msg: 'Invalid credentials'
             });
          }
 
-         const passwordsMatch = await bcrypt.compare(password, existingUser.password);
+         const passwordsMatch = await bcrypt.compare(password, loggedinUser.password);
          if (!passwordsMatch) {
             return res
             .status(400)
@@ -98,12 +99,13 @@ userController.signinUser = async (req, res) => {
          }
 
          const payload = {
-            existingUser: {
-            user_id: existingUser.id
+            loggedinUser: {
+            user_id: loggedinUser.id,
+            is_admin: loggedinUser.is_admin
             }
          };
 
-         const { user_id } = payload.existingUser;
+         const { user_id, is_admin } = payload.loggedinUser;
 
          jwt.sign(
             payload,
@@ -111,11 +113,11 @@ userController.signinUser = async (req, res) => {
             { expiresIn: 36000 },
             (err, token) => {
             if (err) throw err;
-            res.json({ token, user_id });
+            res.json({ token, user_id, is_admin });
             }
          );
 
-         console.log('logging');
+         console.log('logged in');
       } catch (error) {
       console.error(error.message);
       res.status(500).send('Server error');
