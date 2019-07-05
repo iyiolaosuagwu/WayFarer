@@ -70,55 +70,56 @@ userController.signupUser = async (req, res) => {
    }
 };
 
+
 // @route    POST api/auth
 // @desc     Authenticate user & get token
 // @access   Public
 userController.signinUser = async (req, res) => {
-  const { errors, isValid } = validateLoginInput(req.body);
+   const { errors, isValid } = validateLoginInput(req.body);
 
-  // Check Validation
-  if (!isValid) return res.status(400).json(errors);
+   // Check Validation
+   if (!isValid) return res.status(400).json(errors);
 
-    const { email, password } = req.body;
-    try {
-        const existingUser = await userQueries.findUserByEmail(email);
+      const { email, password } = req.body;
+      try {
+         const existingUser = await userQueries.findUserByEmail(email);
 
-        if (!existingUser) {
-          return res.status(400).json({
-              msg: 'Invalid credentials'
+         if (!existingUser) {
+            return res.status(400).json({
+               msg: 'Invalid credentials'
             });
-        }
+         }
 
-        const passwordsMatch = await bcrypt.compare(password, existingUser.password);
-        if (!passwordsMatch) {
-          return res
+         const passwordsMatch = await bcrypt.compare(password, existingUser.password);
+         if (!passwordsMatch) {
+            return res
             .status(400)
             .json({ msg: 'Invalid Credentialsr' });
-        }
+         }
 
-        const payload = {
-          existingUser: {
+         const payload = {
+            existingUser: {
             user_id: existingUser.id
-          }
-        };
+            }
+         };
 
-        const { user_id } = payload.existingUser;
+         const { user_id } = payload.existingUser;
 
-        jwt.sign(
-          payload,
-          env.JWT_SECRET,
-          { expiresIn: 36000 },
-          (err, token) => {
+         jwt.sign(
+            payload,
+            env.JWT_SECRET,
+            { expiresIn: 36000 },
+            (err, token) => {
             if (err) throw err;
             res.json({ token, user_id });
-          }
-        );
+            }
+         );
 
-        console.log('logging');
-    } catch (error) {
+         console.log('logging');
+      } catch (error) {
       console.error(error.message);
       res.status(500).send('Server error');
-    }
+      }
 };
 
 
