@@ -13,7 +13,8 @@ for (let i = 0; SIZE > i; i++) {
         first_name: faker.name.findName(),
         last_name: faker.name.findName(),
         email: faker.internet.email(),
-        password: '12345',
+        avatar: 'https://banner2.kisspng.com/20180615/rtc/kisspng-avatar-user-profile-male-logo-profile-icon-5b238cb002ed52.870627731529056432012.jpg',
+        password: '12345'
     });
 }
 

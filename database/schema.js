@@ -9,9 +9,10 @@ const usersTable = `
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
+    firstName VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
     email VARCHAR(254) NOT NULL,
+    avatar VARCHAR(50) NOT NULL,
     password VARCHAR(150) NOT NULL,
     is_admin BOOLEAN DEFAULT false
 );
