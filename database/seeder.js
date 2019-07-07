@@ -13,7 +13,7 @@ connection.connect()
 const userValues = getValues(users);
 const userSeeder = `
     INSERT INTO users
-    (first_name, last_name, email, password, password)
+    (first_name, last_name, email, password)
     VALUES ${userValues}
 ;`;
 

@@ -4,6 +4,8 @@ import bodyParser from 'body-parser';
 import user from './routes/user';
 import { APP_PORT } from './config';
 import booking from './routes/booking';
+import trips from './routes/trips';
+import bus from './routes/bus';
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 // use route
 app.use('/api/', user);
 app.use('/api/', booking);
+app.use('/api/', trips);
+app.use('/api/', bus);
 
 app.use(morgan('dev'));
 

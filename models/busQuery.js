@@ -6,13 +6,23 @@ import connection from '../database/connection';
 // .catch(error => console.log(error, 'look here'));
 
 
-const bookingQueries = {
-    async findAllBookings() {
+const busQueries = {
+    async findAllBuss() {
         const queryString = 'SELECT * FROM booking;';
         const { rows } = await connection.query(queryString);
         return rows;
     },
+
+    async findBusById(Id) {
+        const queryString = {
+            text: 'SELECT * FROM bus WHERE id=$1;',
+            values: [Id]
+        };
+
+        const { rows } = await connection.query(queryString);
+        return rows[0];
+    },
 };
 
 
-export default bookingQueries;
+export default busQueries;

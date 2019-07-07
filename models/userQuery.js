@@ -16,6 +16,7 @@ connection.connect()
         return rows[0];
     },
 
+
     async createUser(firstName, lastName, email, password) {
         const queryString = {
             text: `INSERT INTO users

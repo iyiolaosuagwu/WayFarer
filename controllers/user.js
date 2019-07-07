@@ -15,7 +15,6 @@ const { env } = process;
 
 const userController = {};
 
-
 // @route    POST api/users
 // @desc     Register user
 // @access   Public
@@ -26,8 +25,8 @@ userController.signupUser = async (req, res) => {
    if (!isValid) return res.status(400).json(errors);
 
    const {
-      first_name,
-      last_name,
+      firstName,
+      lastName,
       email,
       password
    } = req.body;
@@ -44,15 +43,14 @@ userController.signupUser = async (req, res) => {
 
       const passwordHash = await bcrypt.hash(password, salt);
 
-      const newUser = await userQueries.createUser(first_name, last_name, email, passwordHash);
+      const newUser = await userQueries.createUser(firstName, lastName, email, passwordHash);
 
       const payload = {
-         User: {
-            user_id: newUser.id
-         }
+         user_id: newUser.id
       };
 
-      const { user_id } = payload.User;
+      const { user_id } = payload;
+
       jwt.sign(
       payload,
       env.JWT_SECRET,
@@ -62,7 +60,7 @@ userController.signupUser = async (req, res) => {
          res.json({ token, user_id });
       }
       );
-      console.log('reg');
+      return console.log('reg');
    } catch (error) {
       return res.status(500).json({
          status: 'error',
@@ -99,13 +97,11 @@ userController.signinUser = async (req, res) => {
          }
 
          const payload = {
-            loggedinUser: {
             user_id: loggedinUser.id,
             is_admin: loggedinUser.is_admin
-            }
          };
 
-         const { user_id, is_admin } = payload.loggedinUser;
+         const { user_id, is_admin } = payload;
 
          jwt.sign(
             payload,

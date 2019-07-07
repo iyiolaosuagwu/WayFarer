@@ -1,14 +1,14 @@
 
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-// import config from '../config/index';
+import userQueries from '../models/userQuery';
 
 dotenv.config();
 const { env } = process;
 
 module.exports = async (req, res, next) => {
   // Get token from Headers
-  const token = req.header('x-auth-token');
+  const token = req.headers.authorization;
 
   // check if not token
   if (!token) {
@@ -20,7 +20,8 @@ module.exports = async (req, res, next) => {
     const decoded = jwt.verify(token, env.JWT_SECRET);
 
     // set user to the decoded user
-    req.user = decoded.user;
+    req.id = decoded.id;
+    req.users = decoded.users;
     //
     // call next
     next();
@@ -29,4 +30,18 @@ module.exports = async (req, res, next) => {
   }
 };
 
+
+const getUserFromToken = async (token) => {
+    try {
+        const decoded = jwt.verify(token, env.JWT_SECRET);
+        const { id } = decoded;
+        const users = await userQueries.findUserById(id);
+        return users;
+    } catch (error) {
+        return false;
+    }
+};
+
+
+export default getUserFromToken;
 // this auth file is used for protected routes
