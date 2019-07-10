@@ -1,6 +1,6 @@
 import connection from './connection';
 import {
- users, bus, trip, booking
+ users, bus, trips, bookings
 } from './faker/seeder';
 import getValues from '../helpers/sqlValuesGetter';
 
@@ -13,7 +13,7 @@ connection.connect()
 const userValues = getValues(users);
 const userSeeder = `
     INSERT INTO users
-    (first_name, last_name, email, password)
+    (first_name, last_name, email, password, is_admin)
     VALUES ${userValues}
 ;`;
 
@@ -26,18 +26,18 @@ const busSeeder = `
 ;`;
 
 // Trip seeder
-const tripValues = getValues(trip);
+const tripValues = getValues(trips);
 const tripSeeder = `
-    INSERT INTO trip
+    INSERT INTO trips
     (bus_id, origin, destination)
     VALUES ${tripValues}
 ;`;
 
 // Booking seeder
-const bookingValues = getValues(booking);
+const bookingValues = getValues(bookings);
 const bookingSeeder = `
-    INSERT INTO booking
-    (trip_id, user_id)
+    INSERT INTO bookings
+    (trip_id, user_id, seat_number)
     VALUES ${bookingValues}
 ;`;
 

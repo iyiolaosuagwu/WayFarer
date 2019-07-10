@@ -1,40 +1,26 @@
 import connection from '../database/connection';
 
-// connect db
-// connection.connect()
-// .then(() => console.log('Postgres Connected'))
-// .catch(error => console.log(error, 'look here'));
-
 const tripQueries = {
+   async getAllTrips() {
+      const queryString = 'SELECT * FROM trips';
+      const { rows } = await connection.query(queryString);
+      return rows;
+   },
 
-    async findAllTrips() {
-        const queryString = 'SELECT * FROM trip;';
-        const { rows } = await connection.query(queryString);
-        return rows;
-    },
 
-    async createTrip(origin, destination) {
-        const queryString = {
-            text: `INSERT INTO trip
-            ( origin, destination)
-            VALUES($1, $2)
-            RETURNING id, bus_id, origin, destination, trip_date, fare, status;`,
-            values: [origin, destination]
-        };
+   async createTrip(tripId, userId, firstName, lastName, origin, destination, tripDate, fare) {
+      const queryString = {
+         text: `INSERT INTO trips
+         (id, bus_id, origin, destination, trip_date, fare)
+         VALUES($1, $2, $3, $4, $5, $6)
+         RETURNING *;`,
+         values: [tripId, userId, firstName, lastName, origin, destination, tripDate, fare]
+      };
 
-        const { rows } = await connection.query(queryString);
-        return rows[0];
-    },
+      const { rows } = await connection.query(queryString);
+      return rows[0];
+   },
 
-    async findTripById(id) {
-        const queryString = {
-            text: 'SELECT * FROM trip WHERE id=$1;',
-            values: [id]
-        };
-
-        const { rows } = await connection.query(queryString);
-        return rows[0];
-    },
 };
 
 

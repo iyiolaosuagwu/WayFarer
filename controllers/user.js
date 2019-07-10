@@ -2,18 +2,44 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { userQueries } from '../models/userQuery';
+import userQueries from '../models/userQuery';
 
 
 // Load Input Validation
-import validateRegisterInput from '../validation/register';
-import validateLoginInput from '../validation/login';
+import validateRegisterInput from '../validation/signup';
+import validateLoginInput from '../validation/signin';
 
 dotenv.config();
 const { env } = process;
 
-
 const userController = {};
+
+
+userController.getAllUser = async (req, res) => {
+   const { is_admin } = req.body;
+   try {
+      if (!is_admin) {
+         return res.json({ error: 'only admin can view all user' });
+      }
+
+      const user = await userQueries.findAllUser();
+
+      if (!user) {
+         return res.json({ msg: 'Users not found' });
+      }
+
+      return res.status(200).json({
+         status: 'success',
+         data: user
+      });
+   } catch (error) {
+      return res.status(400).json({
+         status: 'error',
+         error: 'Internal server error'
+      });
+   }
+};
+
 
 // @route    POST api/users
 // @desc     Register user
@@ -25,8 +51,8 @@ userController.signupUser = async (req, res) => {
    if (!isValid) return res.status(400).json(errors);
 
    const {
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       email,
       password
    } = req.body;
@@ -35,7 +61,7 @@ userController.signupUser = async (req, res) => {
       const existingUser = await userQueries.findUserByEmail(email);
       if (existingUser) {
       return res.status(400).json({
-            msg: 'Email Already Exists'
+            error: 'Email Already Exists'
          });
       }
       // hashing password
@@ -43,13 +69,12 @@ userController.signupUser = async (req, res) => {
 
       const passwordHash = await bcrypt.hash(password, salt);
 
-      const newUser = await userQueries.createUser(firstName, lastName, email, passwordHash);
+      const newUser = await userQueries.createUser(firstname, lastname, email, passwordHash);
 
       const payload = {
-         user_id: newUser.id
+         user_id: newUser.id,
+         is_admin: newUser.is_admin
       };
-
-      const { user_id } = payload;
 
       jwt.sign(
       payload,
@@ -57,14 +82,13 @@ userController.signupUser = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
          if (err) throw err;
-         res.json({ token, user_id });
+         res.json({ token });
       }
       );
-      return console.log('reg');
    } catch (error) {
       return res.status(500).json({
          status: 'error',
-         msg: `${error.message}`
+         error: `Internal server error ${error.message}`
       });
    }
 };
@@ -85,7 +109,7 @@ userController.signinUser = async (req, res) => {
 
          if (!loggedinUser) {
             return res.status(400).json({
-               msg: 'Invalid credentials'
+               error: 'Invalid credential'
             });
          }
 
@@ -93,15 +117,15 @@ userController.signinUser = async (req, res) => {
          if (!passwordsMatch) {
             return res
             .status(400)
-            .json({ msg: 'Invalid Credentialsr' });
+            .json({ error: 'Invalid Credential' });
          }
 
          const payload = {
+            loggedinUser: {
             user_id: loggedinUser.id,
             is_admin: loggedinUser.is_admin
+            }
          };
-
-         const { user_id, is_admin } = payload;
 
          jwt.sign(
             payload,
@@ -109,14 +133,14 @@ userController.signinUser = async (req, res) => {
             { expiresIn: 36000 },
             (err, token) => {
             if (err) throw err;
-            res.json({ token, user_id, is_admin });
+            res.json({ token });
             }
          );
-
-         console.log('logged in');
       } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Server error');
+      res.status(500).json({
+         status: 'error',
+         error: `Internal server error ${error.message}`
+      });
       }
 };
 

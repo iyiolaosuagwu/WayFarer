@@ -1,28 +1,19 @@
 import connection from '../database/connection';
 
-// connect db
-// connection.connect()
-// .then(() => console.log('Postgres Connected'))
-// .catch(error => console.log(error, 'look here'));
+ export const busQueries = {
 
-
-const busQueries = {
-    async findAllBuss() {
-        const queryString = 'SELECT * FROM booking;';
-        const { rows } = await connection.query(queryString);
-        return rows;
-    },
-
-    async findBusById(Id) {
+    async createNewBus(busId, numberPlate, manufacturer, model, year, capacity) {
         const queryString = {
-            text: 'SELECT * FROM bus WHERE id=$1;',
-            values: [Id]
+            text: `INSERT INTO bus
+                (id, number_plate, manufacturer, model, year, capacity)
+                VALUES($1, $2, $3, $4, $5, $6)
+                RETURNING bus_id, number_plate, manufacturer, model, year, capacity;`,
+            values: [busId, numberPlate, manufacturer, model, year, capacity]
         };
 
         const { rows } = await connection.query(queryString);
         return rows[0];
     },
 };
-
 
 export default busQueries;

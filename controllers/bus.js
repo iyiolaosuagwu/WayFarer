@@ -1,24 +1,27 @@
 import busQueries from '../models/busQuery';
+// import userQueries from '../models/userQuery';
 
 const busController = {};
 
-busController.getAllBus = async (req, res) => {
+
+busController.createBus = async (req, res) => {
+   const {
+      busId, numberPlate, manufacturer, model, year, capacity
+   } = req.body;
    try {
-      const bus = await busQueries.findAllBuss();
-
-      if (!bus) {
-         return res.json({ msg: 'Buss not found' });
-      }
-
-      return res.status(200).json({
+      const newBus = await busQueries.createNewBus(
+         busId, numberPlate, manufacturer, model, year, capacity
+      );
+      return res.status(201).json({
          status: 'success',
-         data: bus
+         message: 'Bus was successfully created',
+         data: newBus
       });
    } catch (error) {
-      return res.status(400).json({
-         status: 'error',
-         data: []
-      });
+      res.status(500).json({
+      status: 'error',
+      error: 'Internal server error'
+   });
    }
 };
 

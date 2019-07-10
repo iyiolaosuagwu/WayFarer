@@ -9,33 +9,33 @@ import isEmpty from './is-empty';
 
   // check if feilds are empty // make sure feilds are empty
   // then goes to validate
-  data.first_name = !isEmpty(data.first_name) ? data.first_name : '';
-  data.last_name = !isEmpty(data.last_name) ? data.last_name : '';
+  data.firstname = !isEmpty(data.firstname) ? data.firstname : '';
+  data.lastname = !isEmpty(data.lastname) ? data.lastname : '';
   data.email = !isEmpty(data.email) ? data.email : '';
   data.password = !isEmpty(data.password) ? data.password : '';
   data.password2 = !isEmpty(data.password2) ? data.password2 : '';
 
-  if (!Validator.isLength(data.first_name, {
+  if (!Validator.isLength(data.firstname, {
       min: 2,
       max: 30
     })) {
-    errors.first_name = 'First Name must be between 2 and 30 characters';
+    errors.firstname = 'First Name must be between 2 and 30 characters';
   }
 
-  if (Validator.isEmpty(data.first_name)) {
-    errors.first_name = 'First Name field is required';
+  if (Validator.isEmpty(data.firstname)) {
+    errors.firstname = 'First Name field is required';
   }
 
 
-  if (!Validator.isLength(data.last_name, {
+  if (!Validator.isLength(data.lastname, {
       min: 2,
       max: 30
     })) {
-    errors.last_name = 'Last Name must be between 2 and 30 characters';
+    errors.lastname = 'Last Name must be between 2 and 30 characters';
   }
 
-  if (Validator.isEmpty(data.last_name)) {
-    errors.last_name = 'Last Name field is required';
+  if (Validator.isEmpty(data.lastname)) {
+    errors.lastname = 'Last Name field is required';
   }
 
   if (Validator.isEmpty(data.email)) {
@@ -79,6 +79,6 @@ import isEmpty from './is-empty';
 
 export default validateRegisterInput;
 
-// errors.first_name, errors.email
+// errors.firstname, errors.email
 // is simple passing our errs into ou empty errors obj
 // ! = not equal
