@@ -31,6 +31,7 @@ busController.getAllBus = async (req, res) => {
 
 busController.createNewBus = async (req, res) => {
    const {
+      user_id,
       numberplate,
       manufacturer,
       model,
@@ -40,20 +41,20 @@ busController.createNewBus = async (req, res) => {
 
 
    try {
-      // if (!req.body.is_admin) {
-      //    return res.json({ error: 'only admin can create a trip' });
-      // }
+      if (!req.body.is_admin) {
+         return res.json({ error: 'only admin can create a Bus' });
+      }
 
 
-      // const existingNumberPlate = await busQueries.findPlateNumber(numberplate);
-      // if (existingNumberPlate) {
-      // return res.status(400).json({
-      //       error: 'number plate Already Exists'
-      //    });
-      // }
+      const existingNumberPlate = await busQueries.findPlateNumber(numberplate);
+      if (existingNumberPlate) {
+      return res.status(400).json({
+            error: 'number plate Already Exists'
+         });
+      }
 
 
-      const newBus = await busQueries.createBus(numberplate, manufacturer, model, capacity);
+      const newBus = await busQueries.createNewBus(user_id, numberplate, manufacturer, model, year, capacity);
 
       const payload = {
          id: newBus.id,
@@ -61,22 +62,19 @@ busController.createNewBus = async (req, res) => {
          number_plate: newBus.numberplate,
          manufacturer: newBus.manufacturer,
          model: newBus.model,
-         year: new Date().getFullYear(),
+         year: newBus.year,
          capacity: newBus.capacity
 
       };
 
-      return res.json(req.body);
-
-      return res.json(payload);
-
-      //    return res.json({
-      //       status: 'success',
-      //       data: payload,
-      //       message: 'Bus was successfully created'
-      //    });
+      return res.status(200).json({
+         status: 'success',
+         data: payload,
+         message: 'Bus was successfully created'
+      });
    } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      // return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      console.log(error);
    }
 };
 

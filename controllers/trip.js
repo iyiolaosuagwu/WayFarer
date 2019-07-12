@@ -8,9 +8,6 @@ const tripController = {};
 
 tripController.getAllTrip = async (req, res) => {
    try {
-      if (!req.body.is_admin) {
-         return res.json({ error: 'only admin can view all Trips' });
-      }
       const trip = await tripQueries.getAllTrips();
 
       if (!trip) {

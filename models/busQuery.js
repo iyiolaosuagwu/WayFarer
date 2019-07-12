@@ -2,6 +2,12 @@ import connection from '../database/connection';
 
  export const busQueries = {
 
+    async findBuses() {
+        const queryString = 'SELECT * FROM bus;';
+        const { rows } = await connection.query(queryString);
+        return rows;
+    },
+
 
     async findPlateNumber(numberPlate) {
         const queryString = {
@@ -13,13 +19,13 @@ import connection from '../database/connection';
         return rows[0];
     },
 
-    async createNewBus(numberPlate, manufacturer, model, year, capacity) {
+    async createNewBus(owner, numberPlate, manufacturer, model, year, capacity) {
         const queryString = {
             text: `INSERT INTO bus
-                (number_plate, manufacturer, model, year, capacity)
-                VALUES($1, $2, $3, $4, $5)
-                RETURNING id, number_plate, manufacturer, model, year, capacity;`,
-            values: [numberPlate, manufacturer, model, year, capacity]
+                (owner, number_plate, manufacturer, model, year, capacity)
+                VALUES($1, $2, $3, $4, $5, $6)
+                RETURNING id, owner, number_plate, manufacturer, model, year, capacity;`,
+            values: [owner, numberPlate, manufacturer, model, year, capacity]
         };
 
         const { rows } = await connection.query(queryString);
