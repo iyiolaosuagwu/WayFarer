@@ -7,11 +7,29 @@ connection.connect()
 .catch(error => console.log(error, 'look here'));
 
  export const userQueries = {
-    async findUserByEmail(userEmail) {
+    async findAllUser() {
+        const queryString = 'SELECT * FROM users;';
+        const { rows } = await connection.query(queryString);
+        return rows;
+    },
+
+    async findUserByEmail(email) {
         const queryString = {
-            text: 'SELECT * FROm users WHERE email=$1;',
-            values: [userEmail]
+            text: 'SELECT * FROM users WHERE email=$1;',
+            values: [email]
         };
+
+        const { rows } = await connection.query(queryString);
+        return rows[0];
+    },
+
+
+    async UserById(id) {
+        const queryString = {
+            text: 'SELECT * FROM users WHERE id=$1;',
+            values: [id]
+        };
+
         const { rows } = await connection.query(queryString);
         return rows[0];
     },
@@ -28,16 +46,6 @@ connection.connect()
         const { rows } = await connection.query(queryString);
         return rows[0];
     },
-
-    async updatePassword(userId, passwordHash) {
-        const queryString = {
-            text: `UPDATE users SET password_hash = $2
-                WHERE id = $1; `,
-            values: [userId, passwordHash]
-        };
-        const { rows } = await connection.query(queryString);
-        return rows;
-    }
 };
 
 

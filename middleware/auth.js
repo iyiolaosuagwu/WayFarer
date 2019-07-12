@@ -1,7 +1,6 @@
-
+// this auth file is used for protected routes
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-// import config from '../config/index';
 
 dotenv.config();
 const { env } = process;
@@ -12,7 +11,7 @@ module.exports = async (req, res, next) => {
 
   // check if not token
   if (!token) {
-    return res.status(401).json({ msg: 'No Token, authorization denied..' });
+    return res.status(401).json({ error: 'No Token, authorization denied..' });
   }
 
   //   Verify Token
@@ -20,13 +19,12 @@ module.exports = async (req, res, next) => {
     const decoded = jwt.verify(token, env.JWT_SECRET);
 
     // set user to the decoded user
-    req.user = decoded.user;
+    req.body.user_id = decoded.loggedinUser.user_id;
+    req.body.is_admin = decoded.loggedinUser.is_admin;
     //
     // call next
     next();
   } catch (err) {
-    res.status(401).json({ msg: 'Token is not Valid' });
+    res.status(401).json({ error: 'Token is not Valid' });
   }
 };
-
-// this auth file is used for protected routes

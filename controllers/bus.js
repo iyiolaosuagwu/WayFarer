@@ -76,7 +76,7 @@ busController.createNewBus = async (req, res) => {
       //       message: 'Bus was successfully created'
       //    });
    } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' })
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
    }
 };
 

@@ -2,18 +2,40 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { userQueries } from '../models/userQuery';
+import userQueries from '../models/userQuery';
 
 
 // Load Input Validation
-import validateRegisterInput from '../validation/register';
-import validateLoginInput from '../validation/login';
+import validateRegisterInput from '../validation/signup';
+import validateLoginInput from '../validation/signin';
 
 dotenv.config();
 const { env } = process;
 
-
 const userController = {};
+
+
+userController.getAllUser = async (req, res) => {
+   const { is_admin } = req.body;
+   try {
+      if (!req.body.is_admin) {
+         return res.json({ error: 'only admin can view all user' });
+      }
+
+      const user = await userQueries.findAllUser();
+
+      if (!user) {
+         return res.json({ msg: 'Users not found' });
+      }
+
+      return res.status(200).json({
+         status: 'success',
+         data: user
+      });
+   } catch (error) {
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+   }
+};
 
 
 // @route    POST api/users
@@ -26,8 +48,8 @@ userController.signupUser = async (req, res) => {
    if (!isValid) return res.status(400).json(errors);
 
    const {
-      first_name,
-      last_name,
+      firstname,
+      lastname,
       email,
       password
    } = req.body;
@@ -36,7 +58,7 @@ userController.signupUser = async (req, res) => {
       const existingUser = await userQueries.findUserByEmail(email);
       if (existingUser) {
       return res.status(400).json({
-            msg: 'Email Already Exists'
+            error: 'Email Already Exists'
          });
       }
       // hashing password
@@ -44,30 +66,24 @@ userController.signupUser = async (req, res) => {
 
       const passwordHash = await bcrypt.hash(password, salt);
 
-      const newUser = await userQueries.createUser(first_name, last_name, email, passwordHash);
+      const newUser = await userQueries.createUser(firstname, lastname, email, passwordHash);
 
       const payload = {
-         User: {
-            user_id: newUser.id
-         }
+         user_id: newUser.id,
+         is_admin: newUser.is_admin
       };
 
-      const { user_id } = payload.User;
       jwt.sign(
       payload,
       env.JWT_SECRET,
       { expiresIn: 360000 },
       (err, token) => {
          if (err) throw err;
-         res.json({ token, user_id });
+         res.json({ token });
       }
       );
-      console.log('reg');
    } catch (error) {
-      return res.status(500).json({
-         status: 'error',
-         msg: `${error.message}`
-      });
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
    }
 };
 
@@ -87,7 +103,7 @@ userController.signinUser = async (req, res) => {
 
          if (!loggedinUser) {
             return res.status(400).json({
-               msg: 'Invalid credentials'
+               error: 'Invalid credential'
             });
          }
 
@@ -95,7 +111,7 @@ userController.signinUser = async (req, res) => {
          if (!passwordsMatch) {
             return res
             .status(400)
-            .json({ msg: 'Invalid Credentialsr' });
+            .json({ error: 'Invalid Credential' });
          }
 
          const payload = {
@@ -105,22 +121,17 @@ userController.signinUser = async (req, res) => {
             }
          };
 
-         const { user_id, is_admin } = payload.loggedinUser;
-
          jwt.sign(
             payload,
             env.JWT_SECRET,
             { expiresIn: 36000 },
             (err, token) => {
             if (err) throw err;
-            res.json({ token, user_id, is_admin });
+            res.json({ token });
             }
          );
-
-         console.log('logged in');
       } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Server error');
+         return res.status(500).json({ status: 'error', error: 'Internal server error' });
       }
 };
 
