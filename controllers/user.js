@@ -18,7 +18,7 @@ const userController = {};
 userController.getAllUser = async (req, res) => {
    const { is_admin } = req.body;
    try {
-      if (!is_admin) {
+      if (!req.body.is_admin) {
          return res.json({ error: 'only admin can view all user' });
       }
 
@@ -33,10 +33,7 @@ userController.getAllUser = async (req, res) => {
          data: user
       });
    } catch (error) {
-      return res.status(400).json({
-         status: 'error',
-         error: 'Internal server error'
-      });
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
    }
 };
 
@@ -86,10 +83,7 @@ userController.signupUser = async (req, res) => {
       }
       );
    } catch (error) {
-      return res.status(500).json({
-         status: 'error',
-         error: `Internal server error ${error.message}`
-      });
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
    }
 };
 
@@ -137,10 +131,7 @@ userController.signinUser = async (req, res) => {
             }
          );
       } catch (error) {
-      res.status(500).json({
-         status: 'error',
-         error: `Internal server error ${error.message}`
-      });
+         return res.status(500).json({ status: 'error', error: 'Internal server error' });
       }
 };
 

@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { APP_PORT } from './config';
+
 // Routes
 import user from './routes/user';
 import booking from './routes/booking';

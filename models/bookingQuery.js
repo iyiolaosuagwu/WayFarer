@@ -20,10 +20,10 @@ const bookingQueries = {
         return rows[0];
     },
 
-    async findBookingsById(id) {
+    async findBookingsById(bookingId) {
         const queryString = {
             text: 'SELECT * FROM bookings WHERE id=$1;',
-            values: [id]
+            values: [bookingId]
         };
         const { rows } = await connection.query(queryString);
         return rows[0];

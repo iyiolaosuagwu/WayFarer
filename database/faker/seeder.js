@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-const SIZE = 10;
+const SIZE = 1;
 
 const users = [];
 const bus = [];
@@ -10,17 +10,17 @@ const bookings = [];
 
 for (let i = 0; SIZE > i; i++) {
     users.push({
-        first_name: faker.name.findName(),
-        last_name: faker.name.findName(),
+        first_name: faker.name.firstName(),
+        last_name: faker.name.firstName(),
         email: faker.internet.email(),
-        password: '12345',
-        is_admin: false
+        password: '12345'
     });
 }
 
 
 for (let i = 0; SIZE > i; i++) {
     bus.push({
+        owner: 1,
         number_plate: '12',
         manufacturer: 'Toyota',
         model: '2017',
@@ -32,9 +32,11 @@ for (let i = 0; SIZE > i; i++) {
 
 for (let i = 0; SIZE > i; i++) {
     trips.push({
+        owner: 2,
         bus_id: 1,
         origin: 'kogi',
-        destination: 'lagos'
+        destination: 'lagos',
+        fare: 5000
     });
 }
 

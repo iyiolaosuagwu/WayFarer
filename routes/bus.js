@@ -5,7 +5,8 @@ import auth from '../middleware/auth';
 const router = express();
 
 // Booking Route
-router.post('/v1/auth/bus', auth, busController.createBus);
+router.get('/v1/auth/bus', auth, busController.getAllBus);
+router.post('/v1/auth/bus', auth, busController.createNewBus);
 
 
 export default router;

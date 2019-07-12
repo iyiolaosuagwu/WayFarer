@@ -7,14 +7,13 @@ const tripQueries = {
       return rows;
    },
 
-
-   async createTrip(tripId, userId, firstName, lastName, origin, destination, tripDate, fare) {
+   async createTrips(owner, busId, origin, destination, fare, status) {
       const queryString = {
          text: `INSERT INTO trips
-         (id, bus_id, origin, destination, trip_date, fare)
+         (owner, bus_id, origin, destination, fare, status)
          VALUES($1, $2, $3, $4, $5, $6)
-         RETURNING *;`,
-         values: [tripId, userId, firstName, lastName, origin, destination, tripDate, fare]
+         RETURNING id, owner, bus_id, origin, destination, trip_date, fare, status;`,
+         values: [owner, busId, origin, destination, fare, status]
       };
 
       const { rows } = await connection.query(queryString);

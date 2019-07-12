@@ -13,19 +13,21 @@ connection.connect()
         return rows;
     },
 
-    async findUserById(userId) {
-        const queryString = {
-            text: 'SELECT * FROM users WHERE id=$1;',
-            values: [userId]
-        };
-        const { rows } = await connection.query(queryString);
-        return rows[0];
-    },
-
     async findUserByEmail(email) {
         const queryString = {
             text: 'SELECT * FROM users WHERE email=$1;',
             values: [email]
+        };
+
+        const { rows } = await connection.query(queryString);
+        return rows[0];
+    },
+
+
+    async UserById(id) {
+        const queryString = {
+            text: 'SELECT * FROM users WHERE id=$1;',
+            values: [id]
         };
 
         const { rows } = await connection.query(queryString);

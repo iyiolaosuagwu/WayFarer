@@ -68,12 +68,12 @@ bookingController.getAllBooking = async (req, res) => {
 bookingController.deleteBookingById = async (req, res) => {
    const { bookingId } = req.params;
    try {
-      const booking = await bookingQueries.findBookingsById(bookingId);
-        if (!booking) {
-            return res.json({ msg: 'Booking not found' });
-         }
+      const book = await bookingQueries.findBookingsById(bookingId);
+      if (book !== req.body.user_id) {
+         return res.status(401).json({ error: 'User not authorized' });
+      }
 
-      await bookingQueries.deleteBookingsId(bookingId);
+      await bookingQueries.deleteBookingsId(book);
          return res.status(200).json({
             status: 'success',
             message: 'booking was successfully deleted'

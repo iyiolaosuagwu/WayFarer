@@ -6,5 +6,6 @@ const router = express();
 
 // Booking Route
 router.get('/v1/auth/trips', auth, tripController.getAllTrip);
+router.post('/v1/auth/trips', auth, tripController.createTrip);
 
 export default router;

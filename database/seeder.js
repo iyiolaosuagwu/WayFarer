@@ -13,7 +13,7 @@ connection.connect()
 const userValues = getValues(users);
 const userSeeder = `
     INSERT INTO users
-    (first_name, last_name, email, password, is_admin)
+    (last_name, first_name, email, password)
     VALUES ${userValues}
 ;`;
 
@@ -21,7 +21,7 @@ const userSeeder = `
 const busValues = getValues(bus);
 const busSeeder = `
     INSERT INTO bus
-    (number_plate, manufacturer, model, year, capacity)
+    (owner, number_plate, manufacturer, model, year, capacity)
     VALUES ${busValues}
 ;`;
 
@@ -29,7 +29,7 @@ const busSeeder = `
 const tripValues = getValues(trips);
 const tripSeeder = `
     INSERT INTO trips
-    (bus_id, origin, destination)
+    (owner, bus_id, origin, destination, fare)
     VALUES ${tripValues}
 ;`;
 

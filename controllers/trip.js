@@ -1,11 +1,16 @@
 import tripQueries from '../models/tripQuery';
 import userQueries from '../models/userQuery';
+// Load Input Validation
+import validateTripInput from '../validation/trip';
 
 const tripController = {};
 
 
 tripController.getAllTrip = async (req, res) => {
    try {
+      if (!req.body.is_admin) {
+         return res.json({ error: 'only admin can view all Trips' });
+      }
       const trip = await tripQueries.getAllTrips();
 
       if (!trip) {
@@ -14,6 +19,7 @@ tripController.getAllTrip = async (req, res) => {
 
       return res.status(200).json({
          status: 'success',
+         body: req.body,
          data: trip
       });
    } catch (error) {
@@ -25,30 +31,44 @@ tripController.getAllTrip = async (req, res) => {
 };
 
 
-tripController.createTrips = async (req, res) => {
+tripController.createTrip = async (req, res) => {
+   const { errors, isValid } = validateTripInput(req.body);
+
+   // Check Validation
+   if (!isValid) return res.status(400).json(errors);
+
    const {
-      tripId, userId, firstName, lastName, origin, destination, tripDate, fare
+      user_id,
+      bus_id,
+      origin,
+      destination,
+      fare,
+      status
    } = req.body;
-
    try {
-      const User = await userQueries.findUserById(userId);
-
-      if (!User) {
-         return res.json({ msg: 'Trip does not exist' });
+      if (!req.body.is_admin) {
+         return res.json({ error: 'only admin can create a trip' });
       }
-      const newBooking = await tripQueries.createTrip(
-         tripId, userId, firstName, lastName, origin, destination, tripDate, fare
-      );
-      return res.status(201).json({
+
+      const newTrip = await tripQueries.createTrips(user_id, bus_id, origin, destination, fare, status);
+
+      const payload = {
+         id: newTrip.id,
+         owner: req.body.user_id,
+         bus_id: newTrip.bus_id,
+         origin: newTrip.origin,
+         destination: newTrip.destination,
+         trip_date: newTrip.trip_date,
+         fare: newTrip.fare,
+         status: newTrip.status
+      };
+      return res.status(200).json({
          status: 'success',
-         message: 'Trip was successfully created',
-         data: newBooking
+         data: payload,
+         message: 'Trip was successfully created'
       });
    } catch (error) {
-      res.status(500).json({
-      status: 'error',
-      error: 'Internal server error'
-   });
+      console.log((error));
    }
 };
 
