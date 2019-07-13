@@ -7,17 +7,20 @@ https://www.pivotaltracker.com/n/projects/2359647
 # Required
 - Node JS
 - Express JS
+- Postgresql DATABASE
 
 # Technologies
 #### Backend Libraries & Frameworks:
 * Node JS
 * Express
 * Babel
+* Passport
+* passport-jwt
 * Mocha & Chai
 * ESLint
-* Joi
-* Moment
+* Validator
 * Jwt
+* Morgan
 * Bcrypt
 * pg
 * dot env
@@ -28,16 +31,16 @@ To install and run the project you need to do the following:
 
 Create the folder you wish to run the project in
 
-Clone the repository: git clone https://github.com/olumidae/WayFarer.git in the folder you created
+Clone the repository: git clone https://github.com/iyiolaosuagwu/WayFarer in the folder you created
 
-Install all dependencies by running the command: **npm** install
+Install all dependencies by running the command: **yarn** yarn
 
-Start the server by running thhe command: **npm** start
+Start the server by running thhe command: **yarn** server
 
 Navigate to localhost: 6000/api/v1 in your browser to view the running application
 
 # Testing
-To run unit tests run the command : **npm** test in the command line terminal
+To run unit tests run the command : **yarn** test in the command line terminal
 
 # API Endpoints
 <table>
@@ -65,7 +68,7 @@ To run unit tests run the command : **npm** test in the command line terminal
 
 </table>
 
-Install Postman and navigate localhost: 6000/api/v1/ to test API endpoints
+Install Postman and navigate localhost: 3000/api/v1/ to test API endpoints
 
 ## Features
 
