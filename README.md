@@ -33,7 +33,7 @@ Create the folder you wish to run the project in
 
 Clone the repository: git clone https://github.com/iyiolaosuagwu/WayFarer in the folder you created
 
-Install all dependencies by running the command: **yarn** yarn
+Install all dependencies by running the command: **yarn**
 
 Start the server by running thhe command: **yarn** server
 
