@@ -31,7 +31,7 @@ CREATE TABLE trips (
     destination VARCHAR(128) NOT NULL,
     trip_date DATE DEFAULT NOW(),
     fare NUMERIC(10, 2) NOT NULL,
-    status BOOLEAN DEFAULT false,
+    status BOOLEAN DEFAULT true,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (bus_id) REFERENCES bus(id) ON DELETE CASCADE
 );

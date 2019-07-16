@@ -20,7 +20,7 @@ bookingController.getAllBooking = async (req, res) => {
       const booking = await bookingQueries.getAllBookings();
 
       if (!booking.length) {
-         return res.json({ msg: 'Bookings not found' });
+         return res.json({ error: 'Bookings not found' });
       }
 
       return res.status(200).json({
@@ -44,7 +44,7 @@ bookingController.getUserBookings = async (req, res) => {
       const trips = await bookingQueries.getAllUserBookings(userid);
 
       if (!trips) {
-         return res.json({ msg: 'No booking available' });
+         return res.json({ error: 'No booking available' });
       }
 
       return res.status(200).json({
@@ -68,7 +68,7 @@ bookingController.getBookingsById = async (req, res) => {
       const booking = await bookingQueries.getBookingById(bookingId);
 
       if (!booking.length) {
-         return res.json({ msg: 'This booking is not available' });
+         return res.json({ error: 'This booking is not available' });
       }
 
       res.status(200).json({
@@ -122,19 +122,19 @@ bookingController.createBooking = async (req, res) => {
       // validate bus ID
       const bus = await busQueries.findID(busid);
       if(!bus.length){
-         return res.json({ msg: 'Bus not found' });
+         return res.json({ error: 'Bus not found, make sure a bus is available' });
       }
 
       // validate trip ID
       const trip = await tripQueries.getTripById(tripid);
       if(!trip.length){
-         return res.json({ msg: 'Trip not found' });
+         return res.json({ error: 'Trip not found, make sure a trip is available' });
       }
 
       // validate trip status
       const tripStatus = await tripQueries.getCancledTripById(tripid);
       if(tripStatus.length){
-         return res.json({ msg: 'Trip cancled out of trip list' });
+         return res.json({ error: 'Trip cancled out of trip list' });
       }
 
       const newBooking = await bookingQueries.createBookings(
@@ -171,12 +171,12 @@ bookingController.deleteBookingById = async (req, res) => {
       const booking = await bookingQueries.getBookingById(bookingId);
 
       if (!booking.length) {
-         return res.json({ msg: 'This booking is not available' });
+         return res.json({ error: 'This booking is not available' });
       }
       const deleteBooking = await bookingQueries.deleteBookingById(bookingId);
 
       if(!deleteBooking){
-         return res.json({ msg: 'Opps! failed to delete booking, try again' });
+         return res.json({ error: 'Opps! failed to delete booking, try again' });
       }
       return res.status(200).json({
          status: 'success',
@@ -212,7 +212,7 @@ bookingController.userSeatUpdate = async (req, res) => {
       const booking = await bookingQueries.getBookingById(booking_id)
 
       if(!booking.length){
-         return res.json({ msg: 'This booking is not available' });
+         return res.json({ error: 'This booking is not available' });
       }
 
       // check for bus seat limit
@@ -227,7 +227,7 @@ bookingController.userSeatUpdate = async (req, res) => {
 
       const updatedSeatNumber = await bookingQueries.seatUpdate(booking_id, seatnumber);
       if(!updatedSeatNumber.length){
-         return res.json({ msg: 'Failed to update seat number' });
+         return res.json({ error: 'Failed to update seat number' });
       }
    
       res.status(200).json({

@@ -24,7 +24,7 @@ tripController.getAllTrip = async (req, res) => {
          trip = await tripQueries.getAllTrips();
       }
       if (!trip.length) {
-         return res.json({ msg: 'Trips not found' });
+         return res.json({ error: 'Trips not found' });
       }
 
       return res.status(200).json({
@@ -55,7 +55,7 @@ tripController.cancelTrip = async (req, res) => {
    const trip = await tripQueries.getTripById(tripId);
 
    if (!trip.length) {
-      return res.json({ msg: 'This trip is not available' });
+      return res.json({ error: 'This trip is not available' });
    }
 
    const tripStatus = trip.status ? false : trip.status;
@@ -110,7 +110,7 @@ tripController.createTrip = async (req, res) => {
       // validate bus ID
       const bus = await busQueries.findID(bus_id);
       if(!bus.length){
-         return res.json({ msg: 'Bus not found' });
+         return res.json({ error: 'Bus not found, make sure a bus is available' });
       }
 
       const newTrip = await tripQueries.createTrips(user_id, bus_id, origin, destination, fare, status);

@@ -17,7 +17,7 @@ busController.getAllBus = async (req, res) => {
       const bus = await busQueries.findBuses();
 
       if (!bus.length) {
-         return res.json({ msg: 'Buses not found' });
+         return res.json({ error: 'Buses not found' });
       }
 
       return res.status(200).json({
