@@ -27,7 +27,7 @@ userController.getAllUser = async (req, res) => {
       const user = await userQueries.findAllUser();
 
       if (!user.length) {
-         return res.json({ msg: 'Users not found' });
+         return res.json({ error: 'Users not found' });
       }
 
       return res.status(200).json({
@@ -89,11 +89,10 @@ userController.signupUser = async (req, res) => {
       }
       );
    } catch (error) {
-      // return res.status(400).json({
-      //    status: 'error',
-      //    error: 'oops! something went wrong went wrong'
-      // });
-      console.log(error)
+      return res.status(400).json({
+         status: 'error',
+         error: 'oops! something went wrong went wrong'
+      });
    }
 };
 
