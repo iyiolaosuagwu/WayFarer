@@ -70,6 +70,8 @@ To run unit tests run the command : **yarn** test in the command line terminal
 
 <tr><td>PATCH</td> <td>/api/v1/trips/:tripId</td>  <td>Cancel a trip</td></tr>
 
+<tr><td>PATCH</td> <td>/api/v1/bookings/:bookingId</td>  <td>user can update seat number after booking a trip</td></tr>
+
 <tr><td>DELETE</td> <td>/api/v1/bookings/:bookingId</td>  <td>Delete a booking</td></tr>
 
 </table>
