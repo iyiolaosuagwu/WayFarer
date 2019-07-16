@@ -1,4 +1,5 @@
 import tripQueries from '../models/tripQuery';
+import busQueries from '../models/busQuery';
 // Load Input Validation
 import validateTripInput from '../validation/trip';
 
@@ -22,7 +23,7 @@ tripController.getAllTrip = async (req, res) => {
       } else {
          trip = await tripQueries.getAllTrips();
       }
-      if (!trip) {
+      if (!trip.length) {
          return res.json({ msg: 'Trips not found' });
       }
 
@@ -38,24 +39,28 @@ tripController.getAllTrip = async (req, res) => {
    }
 };
 
+
+
 // @route    PATCH api/trip
 // @desc     Admin cancel trip
 // @access   Private
 tripController.cancelTrip = async (req, res) => {
    const { tripId } = req.params;
    try {
+
    if (!req.body.is_admin) {
       return res.json({ error: 'only admin can view all user' });
    }
-   const trip = await tripQueries.getTrupById(tripId);
 
-   if (!trip) {
+   const trip = await tripQueries.getTripById(tripId);
+
+   if (!trip.length) {
       return res.json({ msg: 'This trip is not available' });
    }
 
-   const tripStatus = trip.status ? false : '';
+   const tripStatus = trip.status ? false : trip.status;
 
-   await tripQueries.updateTripById(tripId, tripStatus);
+   await tripQueries.updateTripById(tripId);
 
    const payload = {
       id: trip.id,
@@ -74,8 +79,8 @@ tripController.cancelTrip = async (req, res) => {
       message: 'Trip was successfully cancel'
    });
    } catch (error) {
-     return res.status(500).json({ error: 'oops! something went wrong' });
-   }
+         return res.status(500).json({ error: 'oops! something went wrong' });
+      }
 };
 
 // @route    POST api/trip
@@ -97,8 +102,15 @@ tripController.createTrip = async (req, res) => {
    } = req.body;
 
    try {
+      // check if admin
       if (!req.body.is_admin) {
          return res.json({ error: 'only admin can create a trip' });
+      }
+
+      // validate bus ID
+      const bus = await busQueries.findID(bus_id);
+      if(!bus.length){
+         return res.json({ msg: 'Bus not found' });
       }
 
       const newTrip = await tripQueries.createTrips(user_id, bus_id, origin, destination, fare, status);

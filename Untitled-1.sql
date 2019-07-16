@@ -1,6 +1,4 @@
-import connection from './connection';
 
-const usersTable = `
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -10,9 +8,7 @@ CREATE TABLE users (
     password VARCHAR(100) NOT NULL,
     is_admin BOOLEAN DEFAULT true
 );
-`;
 
-const busTable = `
 DROP TABLE IF EXISTS bus CASCADE;
 CREATE TABLE bus (
     id SERIAL PRIMARY KEY,
@@ -25,9 +21,7 @@ CREATE TABLE bus (
     max_seat INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-`;
 
-const tripTable = `
 DROP TABLE IF EXISTS trips CASCADE;
 CREATE TABLE trips (
     id SERIAL PRIMARY KEY,
@@ -41,9 +35,7 @@ CREATE TABLE trips (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (bus_id) REFERENCES bus(id) ON DELETE CASCADE
 );
-`;
 
-const bookingTable = `
 DROP TABLE IF EXISTS bookings CASCADE;
 CREATE TABLE bookings (
     id SERIAL PRIMARY KEY,
@@ -60,22 +52,3 @@ CREATE TABLE bookings (
     FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE,
     FOREIGN KEY (bus_id) REFERENCES bus(id) ON DELETE CASCADE
 );
-`;
-
-const queryString = `
-    ${usersTable}
-    ${busTable}
-    ${tripTable}  
-    ${bookingTable}
-`;
-
-(async () => {
-    try {
-        await connection.query(queryString);
-        connection.end();
-    } catch (error) {
-        /* eslint-disable-next-line */
-        if (error) console.log(error);
-        connection.end();
-    }
-})();

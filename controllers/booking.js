@@ -1,6 +1,7 @@
 import bookingQueries from '../models/bookingQuery';
 import userQueries from '../models/userQuery';
 import tripQueries from '../models/tripQuery';
+import busQueries from '../models/busQuery';
 import connection from '../database/connection';
 
 // validator
@@ -18,7 +19,7 @@ bookingController.getAllBooking = async (req, res) => {
    }
       const booking = await bookingQueries.getAllBookings();
 
-      if (!booking) {
+      if (!booking.length) {
          return res.json({ msg: 'Bookings not found' });
       }
 
@@ -100,11 +101,40 @@ bookingController.createBooking = async (req, res) => {
       email
    } = req.body;
    try {
+      // check for existing seat number
       const existingSeatNumber = await bookingQueries.findSeatNumber(seatnumber);
-      if (existingSeatNumber) {
+      if (existingSeatNumber.length) {
       return res.status(400).json({
             error: 'seat number has been taken'
          });
+      }
+
+      // check for bus seat limit
+      const seatLimit = await busQueries.getSeatLimit(busid);
+      let limit = seatLimit[0].max_seat;
+      
+      if(limit != 0 && limit != undefined && seatnumber > limit){
+         return res.status(400).json({
+            error: `seat number is above max limit. Please select a seat number not greater than ${limit}`
+         });
+      }
+
+      // validate bus ID
+      const bus = await busQueries.findID(busid);
+      if(!bus.length){
+         return res.json({ msg: 'Bus not found' });
+      }
+
+      // validate trip ID
+      const trip = await tripQueries.getTripById(tripid);
+      if(!trip.length){
+         return res.json({ msg: 'Trip not found' });
+      }
+
+      // validate trip status
+      const tripStatus = await tripQueries.getCancledTripById(tripid);
+      if(tripStatus.length){
+         return res.json({ msg: 'Trip cancled out of trip list' });
       }
 
       const newBooking = await bookingQueries.createBookings(
@@ -117,22 +147,10 @@ bookingController.createBooking = async (req, res) => {
          email
       );
 
-      const payload = {
-         id: newBooking.id,
-         owner: req.body.user_id,
-         trip_id: newBooking.tripid,
-         bus_id: newBooking.busid,
-         trip_date: newBooking.trip_date,
-         seat_number: newBooking.seatnumber,
-         first_name: newBooking.first_name,
-         last_name: newBooking.last_name,
-         email: newBooking.email,
-      };
-
       return res.status(201).json({
          status: 'success',
          message: 'booking was successfully created',
-         data: payload
+         data: newBooking
       });
    } catch (error) {
       return res.status(500).json({
@@ -141,6 +159,7 @@ bookingController.createBooking = async (req, res) => {
       });
    }
 };
+
 
 // @route    DELETE api/bookings
 // @desc     delete trip by ID
@@ -172,6 +191,53 @@ bookingController.deleteBookingById = async (req, res) => {
    }
 };
 
+
+
+// @route    PATCH api/trip
+// @desc     Admin cancel trip
+// @access   Private
+bookingController.userSeatUpdate = async (req, res) => {
+    const { user_id: owner, seatnumber } = req.body;
+    const booking_id = req.params.bookingId;
+
+    try {
+      // check if seat is available
+      const existingSeatNumber = await bookingQueries.findSeatNumber(seatnumber);
+      if (existingSeatNumber.length) {
+      return res.status(400).json({
+            error: 'seat number has been taken'
+         });
+      }
+
+      const booking = await bookingQueries.getBookingById(booking_id)
+
+      if(!booking.length){
+         return res.json({ msg: 'This booking is not available' });
+      }
+
+      // check for bus seat limit
+      const seatLimit = await busQueries.getSeatLimit(booking[0].bus_id);
+      let limit = seatLimit[0].max_seat;
+      
+      if(limit != 0 && limit != undefined && seatnumber > limit){
+         return res.status(400).json({
+            error: `seat number is above max limit. Please select a seat number not greater than ${limit}`
+         });
+      }
+
+      const updatedSeatNumber = await bookingQueries.seatUpdate(booking_id, seatnumber);
+      if(!updatedSeatNumber.length){
+         return res.json({ msg: 'Failed to update seat number' });
+      }
+   
+      res.status(200).json({
+            status: 'success',
+            data: updatedSeatNumber
+      })
+    } catch (error) {
+         return res.status(500).json({ error: 'oops! something went wrong' });
+    }
+};
 
 
 export default bookingController;

@@ -14,15 +14,15 @@ busController.getAllBus = async (req, res) => {
          return res.json({ error: 'only admin can view all user' });
       }
 
-      const trip = await busQueries.findBuses();
+      const bus = await busQueries.findBuses();
 
-      if (!trip) {
-         return res.json({ msg: 'Trips not found' });
+      if (!bus.length) {
+         return res.json({ msg: 'Buses not found' });
       }
 
       return res.status(200).json({
          status: 'success',
-         data: trip
+         data: bus
       });
    } catch (error) {
       return res.status(500).json({
@@ -48,7 +48,8 @@ busController.createNewBus = async (req, res) => {
       manufacturer,
       model,
       year,
-      capacity
+      capacity,
+      maxseat
    } = req.body;
 
 
@@ -65,7 +66,7 @@ busController.createNewBus = async (req, res) => {
          });
       }
 
-      const newBus = await busQueries.createNewBus(user_id, numberplate, manufacturer, model, year, capacity);
+      const newBus = await busQueries.createNewBus(user_id, numberplate, manufacturer, model, year, capacity, maxseat);
 
       const payload = {
          id: newBus.id,
@@ -74,8 +75,8 @@ busController.createNewBus = async (req, res) => {
          manufacturer: newBus.manufacturer,
          model: newBus.model,
          year: newBus.year,
-         capacity: newBus.capacity
-
+         capacity: newBus.capacity,
+         max_seat: newBus.max_seat
       };
 
       return res.status(200).json({
@@ -84,7 +85,7 @@ busController.createNewBus = async (req, res) => {
          message: 'Bus was successfully created'
       });
    } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return res.status(500).json({ status: 'error', error: 'oops! something went wrong went wrong' });
    }
 };
 
