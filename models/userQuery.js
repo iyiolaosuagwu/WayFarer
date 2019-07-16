@@ -8,19 +8,18 @@ connection.connect()
 
  export const userQueries = {
     async findAllUser() {
-        const queryString = 'SELECT * FROM users;';
-        const { rows } = await connection.query(queryString);
+        const query = 'SELECT * FROM users;';
+        const { rows } = await connection.query(query);
         return rows;
     },
 
     async findUserByEmail(email) {
         const queryString = {
-            text: 'SELECT * FROM users WHERE email=$1;',
-            values: [email]
+            query: `SELECT * FROM users WHERE email=${email}';`
         };
 
-        const { rows } = await connection.query(queryString);
-        return rows[0];
+        const { rows } = await connection.query(query);
+        return rows;
     },
 
 

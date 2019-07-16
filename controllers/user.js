@@ -26,7 +26,7 @@ userController.getAllUser = async (req, res) => {
 
       const user = await userQueries.findAllUser();
 
-      if (!user) {
+      if (!user.length) {
          return res.json({ msg: 'Users not found' });
       }
 
@@ -112,7 +112,7 @@ userController.signinUser = async (req, res) => {
 
          if (!loggedinUser) {
             return res.status(400).json({
-               error: 'Invalid credential'
+               error: 'oops! something went wrong went wrong'
             });
          }
 
@@ -120,7 +120,7 @@ userController.signinUser = async (req, res) => {
          if (!passwordsMatch) {
             return res
             .status(400)
-            .json({ error: 'Invalid Credential' });
+            .json({ error: 'oops! something went wrong went wrong' });
          }
 
          const payload = {

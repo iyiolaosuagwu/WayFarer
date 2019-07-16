@@ -21,7 +21,7 @@ const userSeeder = `
 const busValues = getValues(bus);
 const busSeeder = `
     INSERT INTO bus
-    (owner, number_plate, manufacturer, model, year, capacity)
+    (user_id, number_plate, manufacturer, model, year, capacity, max_seat)
     VALUES ${busValues}
 ;`;
 
@@ -29,7 +29,7 @@ const busSeeder = `
 const tripValues = getValues(trips);
 const tripSeeder = `
     INSERT INTO trips
-    (owner, bus_id, origin, destination, fare)
+    (user_id, bus_id, origin, destination, fare)
     VALUES ${tripValues}
 ;`;
 
@@ -37,7 +37,7 @@ const tripSeeder = `
 const bookingValues = getValues(bookings);
 const bookingSeeder = `
     INSERT INTO bookings
-    (owner, trip_id, bus_id, seat_number, first_name, last_name, email)
+    (user_id, trip_id, bus_id, seat_number, first_name, last_name, email)
     VALUES ${bookingValues}
 ;`;
 

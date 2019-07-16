@@ -10,6 +10,7 @@ const validateBusInput = (data) => {
    data.model = !isEmpty(data.model) ? data.model : '';
    data.capacity = !isEmpty(data.capacity) ? data.capacity : '';
    data.year = !isEmpty(data.year) ? data.year : '';
+   data.maxseat = !isEmpty(data.maxseat) ? data.maxseat : '';
 
 
    if (Validator.isEmpty(data.numberplate)) {
@@ -30,6 +31,10 @@ const validateBusInput = (data) => {
 
    if (Validator.isEmpty(data.year)) {
       errors.year = 'year field is required';
+   }
+
+   if (Validator.isEmpty(data.maxseat)) {
+      errors.maxseat = 'max_seat field is required';
    }
 
   return {

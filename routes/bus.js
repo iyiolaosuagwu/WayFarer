@@ -8,5 +8,4 @@ const router = express();
 router.get('/v1/bus', auth, busController.getAllBus);
 router.post('/v1/bus', auth, busController.createNewBus);
 
-
 export default router;

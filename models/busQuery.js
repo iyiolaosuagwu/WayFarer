@@ -8,7 +8,6 @@ import connection from '../database/connection';
         return rows;
     },
 
-
     async findPlateNumber(numberPlate) {
         const queryString = {
             text: 'SELECT * FROM bus WHERE number_plate=$1;',
@@ -19,17 +18,35 @@ import connection from '../database/connection';
         return rows[0];
     },
 
-    async createNewBus(owner, numberPlate, manufacturer, model, year, capacity) {
+    async findID(id) {
+        const queryString = {
+            text: `SELECT * FROM bus WHERE id=${id}`,
+            // values: [id]
+        };
+
+        const { rows } = await connection.query(queryString);
+        return rows;
+    },
+
+    async createNewBus(user_id, numberPlate, manufacturer, model, year, capacity, maxSeat) {
         const queryString = {
             text: `INSERT INTO bus
-                (owner, number_plate, manufacturer, model, year, capacity)
-                VALUES($1, $2, $3, $4, $5, $6)
-                RETURNING id, owner, number_plate, manufacturer, model, year, capacity;`,
-            values: [owner, numberPlate, manufacturer, model, year, capacity]
+                (user_id, number_plate, manufacturer, model, year, capacity, max_seat)
+                VALUES($1, $2, $3, $4, $5, $6, $7)
+                RETURNING id, user_id, number_plate, manufacturer, model, year, capacity, max_seat;`,
+            values: [user_id, numberPlate, manufacturer, model, year, capacity, maxSeat]
         };
 
         const { rows } = await connection.query(queryString);
         return rows[0];
+    },
+
+   async getSeatLimit(bus_id) {
+        const queryString = {
+            text: `SELECT max_seat FROM bus WHERE id='${bus_id}';`,
+        };
+        const { rows } = await connection.query(queryString);
+        return rows;
     },
 };
 
