@@ -1,26 +1,27 @@
 import faker from 'faker';
 
-const SIZE = 10;
+const SIZE = 1;
 
 const users = [];
 const bus = [];
-const trip = [];
-const booking = [];
+const trips = [];
+const bookings = [];
 
 
 for (let i = 0; SIZE > i; i++) {
     users.push({
-        first_name: faker.name.findName(),
-        last_name: faker.name.findName(),
+        first_name: faker.name.firstName(),
+        last_name: faker.name.firstName(),
         email: faker.internet.email(),
-        password: '12345',
+        password: '12345'
     });
 }
 
 
 for (let i = 0; SIZE > i; i++) {
     bus.push({
-        number_plate: '12QQ',
+        owner: 1,
+        number_plate: '12',
         manufacturer: 'Toyota',
         model: '2017',
         year: new Date().getFullYear(),
@@ -30,18 +31,25 @@ for (let i = 0; SIZE > i; i++) {
 
 
 for (let i = 0; SIZE > i; i++) {
-    trip.push({
+    trips.push({
+        owner: 2,
         bus_id: 1,
         origin: 'kogi',
         destination: 'lagos',
+        fare: 5000
     });
 }
 
 
 for (let i = 0; SIZE > i; i++) {
-    booking.push({
-        trip_id: 2,
-        user_id: 3
+    bookings.push({
+        owner: 2,
+        trip_id: 1,
+        bus_id: 2,
+        seat_number: 67,
+        first_name: faker.name.firstName(),
+        last_name: faker.name.firstName(),
+        email: faker.internet.email()
     });
 }
 
@@ -49,6 +57,6 @@ for (let i = 0; SIZE > i; i++) {
 export {
     users,
     bus,
-    trip,
-    booking
+    trips,
+    bookings
 };

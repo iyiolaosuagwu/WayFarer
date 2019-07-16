@@ -11,7 +11,8 @@
     "build": "babel src --out-dir dist",
     "start": "node dist/server.js",
     "server": "nodemon --exec babel-node server.js",
-    "lint": "eslint --fix server/"
+    "lint": "eslint --fix server/",
+    "test": "mocha"
   },
   "author": "Iyiola Osuagwu",
   "license": "MIT",
@@ -40,12 +41,13 @@
     "express": "^4.17.1",
     "express-validator": "^6.1.1",
     "faker": "^4.1.0",
-    "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
     "node-pg-migrate": "^3.21.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "pg": "^7.11.0",
-    "validator": "^11.0.0"
+    "validator": "^11.1.0"
   }
 }
