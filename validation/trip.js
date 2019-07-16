@@ -8,7 +8,7 @@ const validateTripInput = (data) => {
   data.origin = !isEmpty(data.origin) ? data.origin : '';
   data.destination = !isEmpty(data.destination) ? data.destination : '';
   data.fare = !isEmpty(data.fare) ? data.fare : '';
-  data.status = !isEmpty(data.status) ? data.status : '';
+
 
 
   if (Validator.isEmpty(data.origin)) {
@@ -23,9 +23,7 @@ const validateTripInput = (data) => {
     errors.fare = 'fare field is required';
   }
 
-   if (Validator.isEmpty(data.status)) {
-    errors.status = 'status field is required';
-  }
+
 
   return {
     errors,

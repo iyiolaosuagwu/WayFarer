@@ -19,6 +19,7 @@ module.exports = async (req, res, next) => {
     const decoded = jwt.verify(token, env.JWT_SECRET);
 
     // set user to the decoded user
+    // set is_admin to the decoded user
     req.body.user_id = decoded.loggedinUser.user_id;
     req.body.is_admin = decoded.loggedinUser.is_admin;
     //

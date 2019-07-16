@@ -12,5 +12,3 @@ export const DB_CONFIG = {
     database: env.DB_NAME,
     password: env.DB_PASSWORD,
 };
-
-// export const { JWT_KEY } = env;

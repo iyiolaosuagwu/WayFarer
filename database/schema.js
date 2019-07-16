@@ -30,12 +30,12 @@ DROP TABLE IF EXISTS trips CASCADE;
 CREATE TABLE trips (
     id SERIAL PRIMARY KEY,
     owner INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
-    bus_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    bus_id INTEGER REFERENCES bus(id) ON DELETE CASCADE NOT NULL,
     origin VARCHAR(128) NOT NULL,
     destination VARCHAR(128) NOT NULL,
     trip_date DATE DEFAULT NOW(),
     fare NUMERIC(10, 2) NOT NULL,
-    status VARCHAR(10) DEFAULT 'active'
+    status BOOLEAN DEFAULT false
 );
 `;
 
@@ -43,9 +43,13 @@ const bookingTable = `
 DROP TABLE IF EXISTS bookings CASCADE;
 CREATE TABLE bookings (
     id SERIAL PRIMARY KEY,
+    owner INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     trip_id INTEGER REFERENCES trips(id) ON DELETE CASCADE NOT NULL,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    bus_id INTEGER REFERENCES bus(id) ON DELETE CASCADE NOT NULL,
     seat_number INTEGER NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     created_on DATE NOT NULL DEFAULT CURRENT_DATE
 );
 `;
@@ -56,11 +60,6 @@ const queryString = `
     ${tripTable}  
     ${bookingTable}
 `;
-
-
-    // ${tripTable}
-    // ${bookingTable}
-
 
 (async () => {
     try {

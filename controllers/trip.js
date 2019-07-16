@@ -1,33 +1,86 @@
 import tripQueries from '../models/tripQuery';
-import userQueries from '../models/userQuery';
 // Load Input Validation
 import validateTripInput from '../validation/trip';
 
 const tripController = {};
 
-
+// @route    GET api/trip
+// @desc     get all trips
+// @access   Private
 tripController.getAllTrip = async (req, res) => {
+   const filterBy = req.query.filter_by;
+   const searchQuery = req.body.search_query;
+   let trip;
    try {
-      const trip = await tripQueries.getAllTrips();
-
+      if (filterBy !== undefined && filterBy !== '' && filterBy !== null) {
+         if (filterBy === 'origin' && searchQuery) {
+            trip = await tripQueries.getTripsByOrigin(searchQuery);
+         }
+         if (filterBy === 'destination' && searchQuery) {
+           trip = await tripQueries.getTripsByDestination(searchQuery);
+         }
+      } else {
+         trip = await tripQueries.getAllTrips();
+      }
       if (!trip) {
          return res.json({ msg: 'Trips not found' });
       }
 
       return res.status(200).json({
          status: 'success',
-         body: req.body,
          data: trip
       });
    } catch (error) {
-      return res.status(400).json({
+      return res.status(500).json({
          status: 'error',
-         error: `Internal server error ${error.message}`
+         error: 'oops! something went wrong went wrong'
       });
    }
 };
 
+// @route    PATCH api/trip
+// @desc     Admin cancel trip
+// @access   Private
+tripController.cancelTrip = async (req, res) => {
+   const { tripId } = req.params;
+   try {
+   if (!req.body.is_admin) {
+      return res.json({ error: 'only admin can view all user' });
+   }
+   const trip = await tripQueries.getTrupById(tripId);
 
+   if (!trip) {
+      return res.json({ msg: 'This trip is not available' });
+   }
+
+   const tripStatus = trip.status ? false : '';
+
+   await tripQueries.updateTripById(tripId, tripStatus);
+
+   const payload = {
+      id: trip.id,
+      owner: req.body.user_id,
+      bus_id: trip.bus_id,
+      origin: trip.origin,
+      destination: trip.destination,
+      trip_date: trip.trip_date,
+      fare: trip.fare,
+      status: tripStatus
+   };
+
+   return res.status(200).json({
+      status: 'success',
+      data: payload,
+      message: 'Trip was successfully cancel'
+   });
+   } catch (error) {
+     return res.status(500).json({ error: 'oops! something went wrong' });
+   }
+};
+
+// @route    POST api/trip
+// @desc     create trips
+// @access   Private
 tripController.createTrip = async (req, res) => {
    const { errors, isValid } = validateTripInput(req.body);
 
@@ -42,6 +95,7 @@ tripController.createTrip = async (req, res) => {
       fare,
       status
    } = req.body;
+
    try {
       if (!req.body.is_admin) {
          return res.json({ error: 'only admin can create a trip' });
@@ -65,9 +119,13 @@ tripController.createTrip = async (req, res) => {
          message: 'Trip was successfully created'
       });
    } catch (error) {
-      console.log((error));
+      return res.status(500).json({
+         status: 'error',
+         error: 'oops! something went wrong went wrong'
+      });
    }
 };
+
 
 
 export default tripController;

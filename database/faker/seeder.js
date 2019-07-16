@@ -43,9 +43,13 @@ for (let i = 0; SIZE > i; i++) {
 
 for (let i = 0; SIZE > i; i++) {
     bookings.push({
+        owner: 2,
         trip_id: 1,
-        user_id: 2,
-        seat_number: 1
+        bus_id: 2,
+        seat_number: 67,
+        first_name: faker.name.firstName(),
+        last_name: faker.name.firstName(),
+        email: faker.internet.email()
     });
 }
 

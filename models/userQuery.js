@@ -24,7 +24,7 @@ connection.connect()
     },
 
 
-    async UserById(id) {
+    async findUserById(id) {
         const queryString = {
             text: 'SELECT * FROM users WHERE id=$1;',
             values: [id]

@@ -37,7 +37,7 @@ const tripSeeder = `
 const bookingValues = getValues(bookings);
 const bookingSeeder = `
     INSERT INTO bookings
-    (trip_id, user_id, seat_number)
+    (owner, trip_id, bus_id, seat_number, first_name, last_name, email)
     VALUES ${bookingValues}
 ;`;
 

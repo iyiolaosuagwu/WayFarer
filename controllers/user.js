@@ -14,7 +14,9 @@ const { env } = process;
 
 const userController = {};
 
-
+// @route    GET api/users
+// @desc     get all registered user;
+// @access   Private
 userController.getAllUser = async (req, res) => {
    const { is_admin } = req.body;
    try {
@@ -79,11 +81,18 @@ userController.signupUser = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
          if (err) throw err;
-         res.json({ token });
+         res.json({ 
+            status: 'success',
+            token,
+            message: "User signup was successfull"
+          });
       }
       );
    } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return res.status(400).json({
+         status: 'error',
+         error: 'oops! something went wrong went wrong'
+      });
    }
 };
 
@@ -131,7 +140,10 @@ userController.signinUser = async (req, res) => {
             }
          );
       } catch (error) {
-         return res.status(500).json({ status: 'error', error: 'Internal server error' });
+         return res.status(400).json({
+            status: 'error',
+            error: 'oops! something went wrong went wrong'
+         });
       }
 };
 
