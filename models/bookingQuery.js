@@ -29,7 +29,6 @@ const bookingQueries = {
 
 
    async getBookingById(bookingId) {
-       console.log(bookingId)
       const query = `SELECT * FROM bookings WHERE id='${bookingId}';`;
 
       const { rows } = await connection.query(query);

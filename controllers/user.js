@@ -89,10 +89,11 @@ userController.signupUser = async (req, res) => {
       }
       );
    } catch (error) {
-      return res.status(400).json({
-         status: 'error',
-         error: 'oops! something went wrong went wrong'
-      });
+      // return res.status(400).json({
+      //    status: 'error',
+      //    error: 'oops! something went wrong went wrong'
+      // });
+      console.log(error)
    }
 };
 
