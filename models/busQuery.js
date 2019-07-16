@@ -21,7 +21,6 @@ import connection from '../database/connection';
     async findID(id) {
         const queryString = {
             text: `SELECT * FROM bus WHERE id=${id}`,
-            // values: [id]
         };
 
         const { rows } = await connection.query(queryString);
