@@ -94,6 +94,9 @@ To run unit tests run the command : **yarn** run test in the command line termin
 
 Install Postman and navigate localhost: 3000/api/v1/ to test API endpoints
 
+# Authurization headers
+### "x-auth-token": Token
+
 ## Features
 
 ### Users
