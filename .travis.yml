@@ -3,9 +3,9 @@ sudo: false
 language: node_js
 
 node_js:
-  - "lts/*"
+  - 'lts/*'
 cache:
-  - npm
+  - yarn
 
 services:
   - postgresql
@@ -14,7 +14,7 @@ before_script:
   - psql -c "create database app_db;" -U postgres
 
 script:
-  - npm test
+  - yarn run test
 
-after_success: 
- - npm run coverage
+after_success:
+  - yarn run coverage
