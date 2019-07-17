@@ -6,6 +6,10 @@ WayFarer is a public bus transportation booking server
 
 https://www.pivotaltracker.com/n/projects/2359647
 
+# Heroku Api Endpoint
+
+https://wayfarerapiv1.herokuapp.com/
+
 # Required
 
 - Node JS
@@ -39,15 +43,15 @@ Create the folder you wish to run the project in
 
 Clone the repository: git clone https://github.com/iyiolaosuagwu/WayFarer in the folder you created
 
-Install all dependencies by running the command: **yarn**
+Install all dependencies by running the command: **yarn** or **npm install**
 
-Start the server by running thhe command: **yarn** server
+Start the server by running thhe command: **yarn** start or **npm** start
 
 Navigate to localhost: 6000/api/v1 in your browser to view the running application
 
 # Testing
 
-To run unit tests run the command : **yarn** test in the command line terminal
+To run unit tests run the command : **yarn** run test in the command line terminal
 
 # API Endpoints
 
@@ -60,11 +64,15 @@ To run unit tests run the command : **yarn** test in the command line terminal
 
 <tr><td>POST</td> <td>/api/v1/trips</td>  <td>Create a trip</td></tr>
 
+<tr><td>POST</td> <td>/api/v1/bus</td>  <td>Create a bus for a trip</td></tr>
+
 <tr><td>POST</td> <td>/api/v1/bookings</td>  <td>Book a seat on a trip</td></tr>
 
 <tr><td>GET</td> <td>/api/v1/users</td>  <td>Admin can View all registered users</td></tr>
 
 <tr><td>GET</td> <td>/api/v1/trips</td>  <td>View all trips</td></tr>
+
+<tr><td>GET</td> <td>/api/v1/bus</td>  <td>View all bus available for a trip</td></tr>
 
 <tr><td>GET</td> <td>/api/v1/trips?filter_by=origin</td>  <td>View trips by origin</td></tr>
 
