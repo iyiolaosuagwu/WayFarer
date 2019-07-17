@@ -81,7 +81,6 @@ bookingController.getBookingsById = async (req, res) => {
 };
 
 
-
 // @route    POST api/bookings
 // @desc     Create bookings
 // @access   Private
@@ -111,9 +110,9 @@ bookingController.createBooking = async (req, res) => {
 
       // check for bus seat limit
       const seatLimit = await busQueries.getSeatLimit(busid);
-      let limit = seatLimit[0].max_seat;
-      
-      if(limit != 0 && limit != undefined && seatnumber > limit){
+      const limit = seatLimit[0].max_seat;
+
+      if (limit != 0 && limit != undefined && seatnumber > limit) {
          return res.status(400).json({
             error: `seat number is above max limit. Please select a seat number not greater than ${limit}`
          });
@@ -121,19 +120,19 @@ bookingController.createBooking = async (req, res) => {
 
       // validate bus ID
       const bus = await busQueries.findID(busid);
-      if(!bus.length){
+      if (!bus.length) {
          return res.json({ error: 'Bus not found, make sure a bus is available' });
       }
 
       // validate trip ID
       const trip = await tripQueries.getTripById(tripid);
-      if(!trip.length){
+      if (!trip.length) {
          return res.json({ error: 'Trip not found, make sure a trip is available' });
       }
 
       // validate trip status
       const tripStatus = await tripQueries.getCancledTripById(tripid);
-      if(tripStatus.length){
+      if (tripStatus.length) {
          return res.json({ error: 'Trip cancled out of trip list' });
       }
 
@@ -167,7 +166,6 @@ bookingController.createBooking = async (req, res) => {
 bookingController.deleteBookingById = async (req, res) => {
    const { bookingId } = req.params;
    try {
-
       const booking = await bookingQueries.getBookingById(bookingId);
 
       if (!booking.length) {
@@ -175,7 +173,7 @@ bookingController.deleteBookingById = async (req, res) => {
       }
       const deleteBooking = await bookingQueries.deleteBookingById(bookingId);
 
-      if(!deleteBooking){
+      if (!deleteBooking) {
          return res.json({ error: 'Opps! failed to delete booking, try again' });
       }
       return res.status(200).json({
@@ -192,12 +190,11 @@ bookingController.deleteBookingById = async (req, res) => {
 };
 
 
-
 // @route    PATCH api/trip
 // @desc     Admin cancel trip
 // @access   Private
 bookingController.userSeatUpdate = async (req, res) => {
-    const { user_id: owner, seatnumber } = req.body;
+    const { user_id, seatnumber } = req.body;
     const booking_id = req.params.bookingId;
 
     try {
@@ -209,31 +206,31 @@ bookingController.userSeatUpdate = async (req, res) => {
          });
       }
 
-      const booking = await bookingQueries.getBookingById(booking_id)
+      const booking = await bookingQueries.getBookingById(booking_id);
 
-      if(!booking.length){
+      if (!booking.length) {
          return res.json({ error: 'This booking is not available' });
       }
 
       // check for bus seat limit
       const seatLimit = await busQueries.getSeatLimit(booking[0].bus_id);
-      let limit = seatLimit[0].max_seat;
-      
-      if(limit != 0 && limit != undefined && seatnumber > limit){
+      const limit = seatLimit[0].max_seat;
+
+      if (limit != 0 && limit != undefined && seatnumber > limit) {
          return res.status(400).json({
             error: `seat number is above max limit. Please select a seat number not greater than ${limit}`
          });
       }
 
       const updatedSeatNumber = await bookingQueries.seatUpdate(booking_id, seatnumber);
-      if(!updatedSeatNumber.length){
+      if (!updatedSeatNumber.length) {
          return res.json({ error: 'Failed to update seat number' });
       }
-   
+
       res.status(200).json({
             status: 'success',
             data: updatedSeatNumber
-      })
+      });
     } catch (error) {
          return res.status(500).json({ error: 'oops! something went wrong' });
     }

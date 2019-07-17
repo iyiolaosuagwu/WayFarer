@@ -12,7 +12,7 @@
     "start": "node dist/server.js",
     "server": "nodemon --exec babel-node server.js",
     "lint": "eslint --fix server/",
-    "test": "mocha"
+    "test": "NODE_ENV=wayfarer mocha --require @babel/polyfill --require @babel/register ./test/**/*.js"
   },
   "author": "Iyiola Osuagwu",
   "license": "MIT",
@@ -30,7 +30,8 @@
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.0",
     "mocha": "^6.1.4",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "nyc": "^14.1.1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
