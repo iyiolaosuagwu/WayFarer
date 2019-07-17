@@ -81,10 +81,10 @@ userController.signupUser = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
          if (err) throw err;
-         res.json({ 
+         res.json({
             status: 'success',
             token,
-            message: "User signup was successfull"
+            message: 'User signup was successfull'
           });
       }
       );
