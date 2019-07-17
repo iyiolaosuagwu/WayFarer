@@ -47,7 +47,7 @@ tripController.cancelTrip = async (req, res) => {
    const { tripId } = req.params;
    try {
    if (!req.body.is_admin) {
-      return res.json({ error: 'only admin can view all user' });
+      return res.json({ error: 'only admin can cancel a trip' });
    }
 
    const trip = await tripQueries.getTripById(tripId);

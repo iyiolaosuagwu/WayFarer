@@ -11,7 +11,7 @@ const busController = {};
 busController.getAllBus = async (req, res) => {
    try {
       if (!req.body.is_admin) {
-         return res.json({ error: 'only admin can view all user' });
+         return res.json({ error: 'only admin can view all bus' });
       }
 
       const bus = await busQueries.findBuses();
