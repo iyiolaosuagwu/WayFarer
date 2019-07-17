@@ -1,0 +1,1 @@
+web: npm run app:setup && npm run start

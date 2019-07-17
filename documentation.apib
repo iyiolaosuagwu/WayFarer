@@ -1,0 +1,478 @@
+FORMAT: 1A
+HOST: http://automart-app.herokuapp.com
+
+# AutoMart
+
+Auto Mart is an online marketplace for automobiles of diverse makes, model or body type. With Auto Mart, users can sell their cars or buy from trusted dealerships or private sellers.
+
+## Authentications [/api/v1/auth]
+
+### Sign up [POST /api/v1/auth/signup]
+This API endpoint creates a user account. It takes a JSON object.
+
++ Request (application/json)
+
+    + Body
+                
+
+                {
+                    "first_name": String,
+                    "last_name": String,
+                    "email": String,
+                    "password": String,
+                    "address": String
+                }
+
+
++ Response 201 (application/json)
+
+    + Body
+
+
+                {
+                    "status": "success",
+                    "message": "welcome (user first_name)",
+                    "data": {
+                        "token": Json web token,
+                        "id": Integer (generated user id),
+                        "first_name": String,
+                        "last_name": String,
+                        "email": string
+                    }
+                }
+
+
+
+### Sign in [POST /api/v1/auth/signin]
+This API endpoint logs in an existing user. It takes a JSON object
+
++ Request (application/json)
+    
+    + Body
+
+    
+                {
+                    "email": String,
+                    "password": String
+                }
+
+
++ Response 200 (application/json)
+
+    + Body
+
+
+                {
+                    "status": "success",
+                    "message": "welcome back (user's first name)!",
+                    "data": {
+                        "token": Json web token,
+                        "id": Integer (References User Id),
+                        "first_name": String,
+                        "last_name": String,
+                        "email": string
+                    }
+                }
+
+
+### Get Password Reset Link [POST /api/v1/auth/reset-password]
+If user email exists, a password rest link will be sent to the user's email address
++ Request (application/json)
+
+    + Body 
+
+    
+                {
+                    "email": String
+                }
+
+
++ Response 200 (application/json)
+
+    + Body
+
+
+                {
+                    "status": "success",
+                    "message": "A password-reset link has been sent to your email"
+                }
+
+                    
+### Reset Password [PATCH /api/v1/auth/reset-password/{token}]
+If user email exists, a password rest link will be sent to the user's email address
+
++ Request (application/json)
+
+    + Body
+
+
+                {
+                    "password": String (new password),
+                    "confirm_password": String (must match password)
+                }
+
+
++ Response 200 (application/json)
+
+    + Body
+
+
+                {
+                    "status": "success",
+                    "message": "Password was successfully updated"
+                }
+
+
+## Car [/api/v1/car]
+
+### Create ad [POST]
+This API endpoint creates an automobile advertisement. It takes a multipart/form-data
+
++ Request (mutipart/form-data)
+
+    + Headers
+    
+                Authorization: token
+    
+    + Body
+        
+
+                make: String (manufacturer's name)
+                price: Float (maximum of two decimal places)
+                sate: String (new/used)
+                model: String
+                bodyTpe: String (e.g. sedan, truck...)
+                display_image: File (.jpg, .jpeg or .png)
+                
+        
+
++ Response 201 (application/json)
+
+    + Body
+
+                {
+                    "status": "success",
+                    "data": {
+                        "car_id": Integer,
+                        "owner": Integer (References User Id),
+                        "state": String,
+                        "status": String (available),
+                        "price": Float,
+                        "manufacturer": String,
+                        "model": String,
+                        "body_type": String,
+                        "image_url": String,
+                        "created_on": Date
+                    }
+                }
+
+
+### View All Car Ads [GET /api/v1/car{?status}{?max_price}{?min_price}{?make}{?state}{?body_type}]
+This API endpoint retrieves available car advertisements. Users can filter result based on the cars' properties
+
++ Request
+
+    + Headers 
+    
+                Authorization: token(optional)
+
++ Parameters
+        
+    + status - String (available)
+    + max_price (optional) - Integer (defaults to 0)
+    + min_price (optional) - Integer (defaults to Infinity)
+    + make (optional) - String
+    + state (optional) - String (new/used)
+    + body_type (optional) - String
+        
++ Response 200 (application/json)
+
+    + Body
+
+
+                {
+                    "status": "success",
+                    "data": Array
+                }
+
+
+
+
+### View All Car Ads (Admin Only) [GET /api/v1/car]
+This api endpoint retrieves all car advertisements irrespective of whether they are sold or availa
+
++ Request
+
+    + Headers
+            
+                Authorization: token
+
++ Response 200 (application/json)
+
+    + Headers
+                
+                Location: /api/v1/car
+    
+    + Body
+
+        
+                {
+                    "status": "success",
+                    "data": Array (array of car objects)
+                }
+
+
+### Mark Car As Sold [PATCH /api/v1/car/{car_id}/status]
+This API endpoint enables advertisers to mark their cars as sold
+
++ Request (application/json)
+
+    + Headers
+    
+                Authorization: token
+                
++ Parameters
+    
+    + car_id - Integer
+
++ Response 200
+
+    + Body
+
+                    
+                {
+                    "status": "success",
+                    "data": {
+                        "car_id": Integer,
+                        "owner": Integer (References User Id),
+                        "state": String,
+                        "status": String (available),
+                        "price": Float,
+                        "manufacturer": String,
+                        "model": String,
+                        "body_type": String,
+                        "image_url": String,
+                        "created_on": Date
+                    }
+                }
+                    
+                
+
+### Update Price of Car [PATCH /api/v1/car/{car_id}/price]
+
+This API endpoint enables advertisers to update the price of their advertisments
+
++ Request (application/json)
+    
+    + Body
+        
+               
+                {
+                    "newPrice": Integer
+                }
+
+    + Headers
+    
+                Authorization: token
+                
++ Parameters
+    
+    + car_id - Integer
+
++ Response 200
+
+    + Body
+
+    
+                {
+                    "status": "success",
+                    "data": {
+                        "car_id": Integer,
+                        "owner": Integer (References User Id),
+                        "state": String,
+                        "status": String (available),
+                        "price": Float,
+                        "manufacturer": String,
+                        "model": String,
+                        "body_type": String,
+                        "image_url": String,
+                        "created_on": Date
+                    }
+                }
+                    
+        
+### Find A Specific Car [GET /api/v1/car/{car_id}]
+This API endpoint allows users find one specific car
+
++ Request 
+
+    + Headers
+    
+                Authorization: token(optional)
+                
++ Parameters
+    
+    + car_id - Integer
+
++ Response 200
+
+    + Body
+    
+                
+                {
+                    "status": "success",
+                    "data": {
+                        "car_id": Integer,
+                        "owner": Integer (References User Id),
+                        "state": String,
+                        "status": String (available),
+                        "price": Float,
+                        "manufacturer": String,
+                        "model": String,
+                        "body_type": String,
+                        "image_url": String,
+                        "created_on": Date
+                    }
+                }
+                
+
+### Delete A Specific Car (Admin Only) [DELETE /api/v1/car/{car_id}]
+This API endpoint allows users find one specific car
+
++ Request 
+
+    + Headers
+    
+                Authorization: token
+                
++ Parameters
+    
+    + car_id - Integer
+
++ Response 200
+
+    + Body
+
+    
+                {
+                    "status": "success",
+                    "message": "car ad was successfully deleted"
+                }
+                        
+
+
+## Purchase Orders [/api/v1/order]
+
+### Create a Purchase Order [POST /api/v1/order]
+This API endpoint enables users to place purchase orders for car ads
+
++ Request (application/json)
+
+    + Body
+    
+
+                {
+                    "car_id": Integer,
+                    "offer": Float
+                }
+
+    + Headers
+    
+                Authorization: token
+
++ Response 201
+
+    + Body 
+    
+                   
+                {
+                    "status": "success",
+                    "data": {
+                        "order_id": Integer,
+                        "buyer_id": Integer (References User Id),
+                        "car_id": Integer,
+                        "offer": Float,
+                        "price": Float,
+                        "status": String (defaults to 'pending'),
+                        "created_on": Date
+                    }
+                }
+                
+
+
+### Update Offer [PATCH /api/v1/order/{order_id}/price]
+This API endpoint enables users to update the offering price of their purchase order
+
++ Request (application/json)
+
+    + Body
+    
+                    
+                {
+                    "newOffer": Float
+                }
+
+    + Headers
+    
+                Authorization: token
+                
++ Parameters
+
+    + order_id - Integer
+    
++ Response 200
+
+    + Body 
+        
+                    
+                {
+                    "status": "success",
+                    "data": {
+                        "order_id": Integer,
+                        "buyer_id": Integer (References User Id),
+                        "car_id": Integer,
+                        "offer": Float,
+                        "price": Float,
+                        "status": String (defaults to 'pending'),
+                        "created_on": Date,
+                        "oldOffer": Float
+                    }
+                }
+                
+
+## Flags [/api/v1/flag]
+
+### Flag an Advertisement [POST /api/v1/flag]
+This API endpoint enables users to report fraudulent advertisements
+
++ Request (application/json)
+
+    + Body
+    
+                
+                {
+                    "car_id": Integer,
+                    "reason": String,
+                    "description": String
+                }
+
+    + Headers
+    
+                Authorization: token
+
++ Response 201
+
+    + Body 
+    
+        
+                {
+                    "status": "success",
+                    "data": {
+                        "flag_id": Integer,
+                        "car_id": Integer,
+                        "reason": String,
+                        "description": String.
+                        "reported_by": Integer,
+                        "created_on": Date
+                    }
+                }
