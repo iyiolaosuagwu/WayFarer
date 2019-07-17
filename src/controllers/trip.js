@@ -24,7 +24,7 @@ tripController.getAllTrip = async (req, res) => {
          trip = await tripQueries.getAllTrips();
       }
       if (!trip.length) {
-         return res.json({ error: 'Trips not found' });
+         return res.status(404).json({ error: 'Trips not found' });
       }
 
       return res.status(200).json({
@@ -40,14 +40,12 @@ tripController.getAllTrip = async (req, res) => {
 };
 
 
-
 // @route    PATCH api/trip
 // @desc     Admin cancel trip
 // @access   Private
 tripController.cancelTrip = async (req, res) => {
    const { tripId } = req.params;
    try {
-
    if (!req.body.is_admin) {
       return res.json({ error: 'only admin can view all user' });
    }
@@ -109,7 +107,7 @@ tripController.createTrip = async (req, res) => {
 
       // validate bus ID
       const bus = await busQueries.findID(bus_id);
-      if(!bus.length){
+      if (!bus.length) {
          return res.json({ error: 'Bus not found, make sure a bus is available' });
       }
 
@@ -137,7 +135,6 @@ tripController.createTrip = async (req, res) => {
       });
    }
 };
-
 
 
 export default tripController;

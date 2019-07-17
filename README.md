@@ -1,32 +1,38 @@
 # WayFarer
+
 WayFarer is a public bus transportation booking server
 
 # Pivotal Tracker
+
 https://www.pivotaltracker.com/n/projects/2359647
 
 # Required
+
 - Node JS
 - Express JS
 - Postgresql DATABASE
 
 # Technologies
+
 #### Backend Libraries & Frameworks:
-* Node JS
-* Express
-* Babel
-* Passport
-* passport-jwt
-* Mocha & Chai
-* ESLint
-* Validator
-* Jwt
-* Morgan
-* Bcrypt
-* pg
-* dot env
-* faker
+
+- Node JS
+- Express
+- Babel
+- Passport
+- passport-jwt
+- Mocha & Chai
+- ESLint
+- Validator
+- Jwt
+- Morgan
+- Bcrypt
+- pg
+- dot env
+- faker
 
 # Installation
+
 To install and run the project you need to do the following:
 
 Create the folder you wish to run the project in
@@ -40,9 +46,11 @@ Start the server by running thhe command: **yarn** server
 Navigate to localhost: 6000/api/v1 in your browser to view the running application
 
 # Testing
+
 To run unit tests run the command : **yarn** test in the command line terminal
 
 # API Endpoints
+
 <table>
 <tr><th>HTTP VERB</th><th>ENDPOINT</th><th>FUNCTIONALITY</th></tr>
 
@@ -81,24 +89,25 @@ Install Postman and navigate localhost: 3000/api/v1/ to test API endpoints
 ## Features
 
 ### Users
-* Users can sign up
-* Users can login
-* Users can booking a seat on a trip.
-* Users can view booking by ID
-* Users can delete their booking.
-* Users can get a list of filtered trips based on origin.
-* Users can get a list of filtered trips based on destination.
-* Users can specify their seat numbers when making a booking.
-* Users can change seat after booking a trips.
+
+- Users can sign up
+- Users can login
+- Users can booking a seat on a trip.
+- Users can view booking by ID
+- Users can delete their booking.
+- Users can get a list of filtered trips based on origin.
+- Users can get a list of filtered trips based on destination.
+- Users can specify their seat numbers when making a booking.
+- Users can change seat after booking a trips.
 
 ### Admin
-* Admin can create a trip.
-* Admin can cancel a trip.
-* Both Admin and Users can see all trips.
-* View all bookings. An Admin can see all bookings, while user can see all of his/her bookings.
-* Admin can see all registered users
- 
 
+- Admin can create a trip.
+- Admin can cancel a trip.
+- Both Admin and Users can see all trips.
+- View all bookings. An Admin can see all bookings, while user can see all of his/her bookings.
+- Admin can see all registered users
 
 # Author
+
 ### Iyiola Osuagwu

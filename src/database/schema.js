@@ -1,5 +1,11 @@
 import connection from './connection';
 
+
+// connect db
+connection.connect()
+.then(() => console.log('Postgres Connected'))
+.catch(error => console.log(error, 'look here'));
+
 const usersTable = `
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (

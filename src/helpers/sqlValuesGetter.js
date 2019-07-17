@@ -8,7 +8,6 @@ const convertNestedDataObjectToArray = (dataArray) => {
     return data;
 };
 
-
 /**
  * takes an array of arrays and replaces the square bracket with parenthesis
  * surrounds each element of the array with quotes

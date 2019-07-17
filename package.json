@@ -1,53 +1,63 @@
 {
-  "name": "snippet",
+  "name": "automart",
   "version": "1.0.0",
-  "description": "WayFarer is a public transportation booking server",
-  "main": "server.js",
+  "description": "Auto Mart is an online marketplace for automobiles of diverse makes, model or body type. With Auto Mart, users can sell their cars or buy from trusted dealerships or private sellers.",
+  "main": "app.js",
   "scripts": {
-    "migrate": "node-pg-migrate",
-    "db:migrate": "babel-node ./database/schema.js",
-    "db:seed": "babel-node ./database/seeder.js",
-    "app:setup": "npm run db:migrate && npm run db:seed",
-    "build": "babel src --out-dir dist",
-    "start": "node dist/server.js",
-    "server": "nodemon --exec babel-node server.js",
-    "lint": "eslint --fix server/",
-    "test": "mocha"
+    "app:setup": "babel-node ./src/database",
+    "test": "jest",
+    "stest": "nyc --reporter=html --reporter=text --cache mocha ./src/test --require @babel/polyfill --require @babel/register --recursive --no-timeout --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "eslint --fix src/",
+    "dev": "nodemon --exec babel-node app.js",
+    "start": "babel-node app.js"
   },
-  "author": "Iyiola Osuagwu",
-  "license": "MIT",
-  "devDependencies": {
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/O-Osahon/AutoMart.git"
+  },
+  "author": "Osahon Oboite",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/O-Osahon/AutoMart/issues"
+  },
+  "homepage": "https://github.com/O-Osahon/AutoMart#readme",
+  "dependencies": {
     "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/node": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "bcrypt": "^3.0.6",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.14.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.16.4",
+    "faker": "^4.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "^0.22.0",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.1",
+    "nodemon": "^1.19.1",
+    "pg": "^7.11.0",
+    "regenerator-runtime": "^0.13.2",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {
     "babel-plugin-istanbul": "^5.1.4",
     "babel-watch": "^7.0.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "coveralls": "^3.0.4",
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.18.0",
+    "coveralls": "^3.0.3",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "jest": "^24.8.0",
     "mocha": "^6.1.4",
-    "nodemon": "^1.19.1"
+    "nyc": "^14.1.1"
   },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "config": "^3.1.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.0.0",
-    "express": "^4.17.1",
-    "express-validator": "^6.1.1",
-    "faker": "^4.1.0",
-    "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
-    "morgan": "^1.9.1",
-    "node-pg-migrate": "^3.21.1",
-    "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0",
-    "pg": "^7.11.0",
-    "validator": "^11.1.0"
+  "engines": {
+    "node": "10.15.3"
   }
 }
