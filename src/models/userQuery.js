@@ -1,5 +1,5 @@
 import connection from '../database/connection';
-
+ 
 
 // connect db
 connection.connect()
