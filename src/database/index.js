@@ -11,21 +11,20 @@ connection.connect()
 const Migration = {
 
 
-
     async migrate() {
         try {
             console.log('Dropping users table');
             await connection.query('DROP TABLE IF EXISTS users CASCADE');
-            
+
             console.log('Dropping bus table');
             await connection.query('DROP TABLE IF EXISTS buses CASCADE');
-            
+
             console.log('Dropping trip table');
             await connection.query('DROP TABLE IF EXISTS trips CASCADE');
-            
+
             console.log('Dropping booking table');
             await connection.query('DROP TABLE IF EXISTS bookings CASCADE');
-            
+
             console.log('Creating User table');
             await connection.query(`
                 CREATE TABLE IF NOT EXISTS users(
@@ -37,7 +36,7 @@ const Migration = {
                     is_admin BOOLEAN DEFAULT false
                     );
                 `);
-            
+
             console.log('Creating bus table');
             await connection.query(`
                            CREATE TABLE IF NOT EXISTS bus(
@@ -52,7 +51,7 @@ const Migration = {
                             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                             );
                            `);
-            
+
             console.log('Creating trip table');
             await connection.query(`
                            CREATE TABLE IF NOT EXISTS trips(
@@ -68,7 +67,7 @@ const Migration = {
                             FOREIGN KEY (bus_id) REFERENCES bus(id) ON DELETE CASCADE
                             );
                            `);
-            
+
             console.log('Creating booking table');
             await connection.query(`
                            CREATE TABLE IF NOT EXISTS bookings(
@@ -87,7 +86,7 @@ const Migration = {
                             FOREIGN KEY (bus_id) REFERENCES bus(id) ON DELETE CASCADE
                                                                );
                            `);
-            
+
             const adminQuery = `INSERT INTO
                 users(first_name, last_name, email, password, is_admin)
                 VALUES($1,$2,$3,$4,$5)
@@ -103,7 +102,6 @@ const Migration = {
             console.log('Creating Admin');
             await connection.query(adminQuery, values);
             connection.end();
-            
         } catch (error) {
             connection.end();
             console.log(error);

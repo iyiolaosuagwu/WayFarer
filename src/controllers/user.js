@@ -18,7 +18,6 @@ const userController = {};
 // @desc     get all registered user;
 // @access   Private
 userController.getAllUser = async (req, res) => {
-   const { is_admin } = req.body;
    try {
       if (!req.body.is_admin) {
          return res.json({ error: 'only admin can view all user' });
@@ -112,7 +111,7 @@ userController.signinUser = async (req, res) => {
 
          if (!loggedinUser) {
             return res.status(400).json({
-               error: 'oops! something went wrong went wrong'
+               error: 'User doesnt exist'
             });
          }
 
@@ -120,7 +119,7 @@ userController.signinUser = async (req, res) => {
          if (!passwordsMatch) {
             return res
             .status(400)
-            .json({ error: 'oops! something went wrong went wrong' });
+            .json({ error: 'Password incorrect' });
          }
 
          const payload = {

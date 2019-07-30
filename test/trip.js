@@ -1,21 +1,8 @@
-// // import chai from 'chai';
-// import * as chai from 'chai';
-// import chaiHttp from 'chai-http';
-// import server from '../server';
-
-
-// // const { should } = chai;
-// chai.use(chaiHttp);
-
 // Require the dev-dependencies
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import tripRoute from '../src/routes/trip';
-// import userRoute from '../routes/user';
-// import busRoute from '../routes/bus';
-// import bookingRoute from '../routes/booking';
 import connection from '../src/database/connection';
-
+import app from '../app';
 process.env.NODE_ENV = 'wayfarer';
 
 const { assert, expect } = chai;
@@ -28,7 +15,7 @@ const token = 'ctvudrtr54678fygvyh';
 // Get
 describe('Trips', () => {
       it('it should GET all the trips', (done) => {
-        chai.request(tripRoute)
+        chai.request(app)
             .get('api/v1/trips')
             .set('x-auth-token', token)
             .end((err, res) => {
